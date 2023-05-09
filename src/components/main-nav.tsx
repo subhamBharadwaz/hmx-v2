@@ -9,6 +9,8 @@ import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
 import { MainNavItem } from "@/types"
 
+import { buttonVariants } from "./ui/button"
+
 interface MainNavProps {
   items?: MainNavItem[]
   children?: React.ReactNode
@@ -50,6 +52,15 @@ export function MainNav({ items, children }: MainNavProps) {
         <button>
           <Icons.favorite />
         </button>
+        <Link
+          href="/login"
+          className={cn(
+            buttonVariants({ variant: "secondary", size: "sm" }),
+            "px-4"
+          )}
+        >
+          Login
+        </Link>
       </nav>
       <button
         className="flex items-center space-x-2 md:hidden"
