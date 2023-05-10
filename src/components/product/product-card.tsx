@@ -29,12 +29,12 @@ const ProductCard: FC<ProductCardProps> = ({ product, isLoading }) => {
         </div>
         <div className="mt-3 flex w-full  justify-between">
           <div>
-            <h4 className="text-lg font-semibold text-slate-700 lg:text-xl ">
+            <h4 className="text-lg font-semibold text-foreground lg:text-xl ">
               {product?.name}
             </h4>
-            <h5 className="lg:text-md text-sm text-slate-500">{product?.category}</h5>
+            <h5 className="lg:text-md text-sm text-slate-500 dark:text-slate-300">{product?.category}</h5>
           </div>
-          <h5 className="lg:text-md text-sm font-semibold text-slate-700">
+          <h5 className="lg:text-md text-sm font-semibold text-foreground">
             Rs. {product?.price}
           </h5>
         </div>

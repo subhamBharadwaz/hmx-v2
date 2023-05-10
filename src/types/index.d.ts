@@ -94,6 +94,20 @@ export enum RatingType {
   Five = 5,
 }
 
+export interface IReview {
+  _id: string
+  user: string,
+  userInfo : {
+    firstName: string
+    lastName: string,
+    email: string,
+    photo: string,
+  },
+  rating: number,
+  comment: string,
+  date: Date
+}
+
 export interface IProduct {
   _id?: string
   name: string
@@ -111,13 +125,7 @@ export interface IProduct {
   size: string[]
   ratings: RatingType
   numberOfReviews: number
-  reviews: {
-    user: string
-    name: string
-    rating: number
-    comment: string
-  }[]
-
+  reviews: IReview[]
   user: string
   createdAt: Date
   updatedAt: Date

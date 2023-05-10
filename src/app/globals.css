@@ -73,3 +73,7 @@
 .fixed-width-600{
   width: 600px !important
 }
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
