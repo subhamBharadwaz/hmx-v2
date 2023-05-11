@@ -7,9 +7,16 @@ import { Icons } from "@/components/icons"
 import { MobileNav } from "@/components/mobile-nav"
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
+import { AppDispatch } from "@/store"
+import { logout, selectCurrentToken } from "@/store/features/auth/auth-slice"
 import { MainNavItem } from "@/types"
+import { useDispatch, useSelector } from "react-redux"
 
-import { buttonVariants } from "./ui/button"
+import { Bag } from "./bag"
+import { HoverNavigationMenu } from "./hover-navigation"
+import { ModeToggle } from "./mode-toggle"
+import { Button, buttonVariants } from "./ui/button"
+import { WishList } from "./wishlist"
 
 interface MainNavProps {
   items?: MainNavItem[]
@@ -19,49 +26,41 @@ interface MainNavProps {
 export function MainNav({ items, children }: MainNavProps) {
   const segment = useSelectedLayoutSegment()
   const [showMobileMenu, setShowMobileMenu] = React.useState<boolean>(false)
+  const token = useSelector(selectCurrentToken)
+  const dispatch = useDispatch<AppDispatch>()
 
   return (
-    <div className="flex w-full justify-between gap-6 md:gap-10">
+    <nav className="flex w-full justify-between gap-6 md:gap-10">
       <Link href="/" className="hidden items-center space-x-2 md:flex">
         <span className="hidden font-bold sm:inline-block">
           {siteConfig.name}
         </span>
       </Link>
-      {items?.length ? (
-        <nav className="hidden gap-6 md:flex">
-          {items?.map((item, index) => (
-            <Link
-              key={index}
-              href={item.href}
-              className={cn(
-                "flex items-center text-lg font-medium transition-colors hover:text-foreground/80 sm:text-sm",
-                item.href.startsWith(`/${segment}`)
-                  ? "text-foreground"
-                  : "text-foreground/60"
-              )}
-            >
-              {item.title}
-            </Link>
-          ))}
-        </nav>
-      ) : null}
-      <nav className="hidden gap-6 md:flex">
-        <button>
-          <Icons.bag />
-        </button>
-        <button>
-          <Icons.favorite />
-        </button>
-        <Link
-          href="/login"
-          className={cn(
-            buttonVariants({ variant: "secondary", size: "sm" }),
-            "px-4"
-          )}
-        >
-          Login
-        </Link>
-      </nav>
+      <HoverNavigationMenu />
+      <div className="hidden gap-6 md:flex">
+        <WishList />
+        <Bag />
+        {!token ? (
+          <Link
+            href="/login"
+            className={cn(
+              buttonVariants({ variant: "secondary", size: "sm" }),
+              "px-4"
+            )}
+          >
+            Login
+          </Link>
+        ) : (
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => dispatch(logout())}
+          >
+            Logout
+          </Button>
+        )}
+        <ModeToggle />
+      </div>
       <button
         className="flex items-center space-x-2 md:hidden"
         onClick={() => setShowMobileMenu(!showMobileMenu)}
@@ -72,6 +71,6 @@ export function MainNav({ items, children }: MainNavProps) {
       {showMobileMenu && items && (
         <MobileNav items={items}>{children}</MobileNav>
       )}
-    </div>
+    </nav>
   )
 }

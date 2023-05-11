@@ -1,7 +1,8 @@
+
+
 import React, { FC } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { cn } from "@/lib/utils"
 import { IProduct } from "@/types"
 
 interface ProductCardProps {
@@ -12,8 +13,8 @@ interface ProductCardProps {
 const ProductCard: FC<ProductCardProps> = ({ product, isLoading }) => {
   return (
     <Link href={`/products/${product._id}`}>
-      <div className="mx-auto w-full md:min-w-[300px]  xl:max-w-[500px]">
-        <div className="relative h-96 w-full bg-gray-200 md:h-[30rem]">
+      <div className="mx-auto w-full md:min-w-[300px]  xl:max-w-[40rem]">
+        <div className="relative h-96 w-full bg-gray-200 md:h-[30rem] xl:h-[35rem] 2xl:h-[40rem]">
           <Image
             src={product?.photos[0]?.secure_url}
             alt={product?.name}
@@ -29,12 +30,12 @@ const ProductCard: FC<ProductCardProps> = ({ product, isLoading }) => {
         </div>
         <div className="mt-3 flex w-full  justify-between">
           <div>
-            <h4 className="text-lg font-semibold text-slate-700 lg:text-xl ">
+            <h4 className="text-lg font-semibold text-foreground lg:text-xl ">
               {product?.name}
             </h4>
-            <h5 className="lg:text-md text-sm text-slate-500">{product?.category}</h5>
+            <h5 className="lg:text-md text-sm text-slate-500 dark:text-slate-300">{product?.category}</h5>
           </div>
-          <h5 className="lg:text-md text-sm font-semibold text-slate-700">
+          <h5 className="lg:text-md text-sm font-semibold text-foreground">
             Rs. {product?.price}
           </h5>
         </div>

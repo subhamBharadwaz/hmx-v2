@@ -1,11 +1,11 @@
 "use client"
 
 import React from "react"
-import { Scrollbar } from "swiper"
+import { Pagination } from "swiper"
 import { Swiper, SwiperSlide } from "swiper/react"
 
 import "swiper/css"
-import "swiper/css/scrollbar";
+import "swiper/css/pagination"
 import Image from "next/image"
 
 import { cn } from "@/lib/utils"
@@ -25,21 +25,21 @@ const SingleProductImageSwiper: React.FC<SliderProps> = ({ photos, productName,c
 
   return (
     <Swiper
-      scrollbar={{
-        hide: true,
-        scrollbarDisabledClass: 'swiper-scrollbar-disabled'
-      }}
-      modules={[Scrollbar]}
-      className={cn("mySwiper min-h-[80vh]", className)}
+    pagination={{
+      dynamicBullets: true,
+      clickable: true,
+    }}
+    modules={[Pagination]}
+      className={cn("mySwiper  min-h-[80vh]", className)}
     >
       {photos?.map((photo) => (
         <SwiperSlide key={photo.id} className="group" >
-          <div className="relative mb-1 h-[80vh] w-full">   
+          <div className="relative mb-10 h-[80vh] w-full">   
             <Image
               src={photo.secure_url}
               alt={productName}
               fill
-              className="object-cover"
+              className="cursor-grabbing object-cover"
             />
         </div>
         </SwiperSlide>

@@ -73,3 +73,17 @@
 .fixed-width-600{
   width: 600px !important
 }
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.container-xl {
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.container-lg {
+  margin: 0 auto;
+  padding: 0 4rem;
+}
