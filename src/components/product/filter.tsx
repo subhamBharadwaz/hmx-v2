@@ -4,7 +4,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import {
@@ -18,6 +18,7 @@ import {
 import { ProductCategories, ProductSections, ProductSizes } from "@/constants"
 
 import { Icons } from "../icons"
+import { cn } from "@/lib/utils"
 
 export function FilterProducts() {
   return (
@@ -97,7 +98,10 @@ export function FilterProducts() {
             </AccordionItem>
           </Accordion>
           <SheetFooter className="my-10">
-            <Button type="submit">Save changes</Button>
+            <div className="w-full space-y-5">
+            <Button type="submit" className="w-full">Apply</Button>
+            <Button type="submit" className='w-full' variant='outline'>Remove all</Button>
+            </div>
           </SheetFooter>
       
         </SheetContent>

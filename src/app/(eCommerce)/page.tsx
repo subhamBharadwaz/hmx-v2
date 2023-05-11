@@ -14,7 +14,7 @@ export default function Home() {
   return (
     <section className="">
       <div className="relative">
-        <h1 className="container absolute top-2/4 z-30 text-center text-5xl font-bold">
+        <h1 className="container-lg absolute top-2/4 z-30 text-center text-5xl font-bold">
           Lorem ipsum dolor sit amet.
         </h1>
         <AspectRatio ratio={16 / 9} className="max-h-[70vh]">

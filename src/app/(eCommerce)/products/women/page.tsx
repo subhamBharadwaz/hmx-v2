@@ -24,9 +24,9 @@ export default async function WomenProductsPage() {
   return (
     <section>
       
-        <h2 className="container my-5 text-center text-xl font-semibold md:text-2xl lg:my-10 lg:text-3xl">Which Jogger is right for you?</h2>
+        <h2 className="container-lg my-5 text-center text-xl font-semibold md:text-2xl lg:my-10 lg:text-3xl">Which Jogger is right for you?</h2>
 
-       <div className="container mb-16"  >
+       <div className="container-lg mb-16"  >
         <SwiperCards data={ProductCarousalData}  />
         </div>
 
@@ -39,7 +39,7 @@ export default async function WomenProductsPage() {
          
           
         </div>
-        <div className="container">
+        <div className="container-lg">
         <div className="mb-5">
           <FilterProducts />
         </div>

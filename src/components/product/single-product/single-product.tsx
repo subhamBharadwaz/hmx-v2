@@ -1,26 +1,54 @@
 "use client"
 
-import { FC, useState } from "react"
+import { FC, useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { Icons } from "@/components/icons"
 import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import { RootState } from "@/store"
+import {
+  useCreateWishlistItemMutation,
+  useRemoveWishlistItemMutation,
+} from "@/store/services/wishlist"
 import { IProduct } from "@/types"
 import { useQuery } from "@tanstack/react-query"
 import axios from "axios"
+import { useSelector } from "react-redux"
 
 import ProductInfoAccordion from "./product-info-accordion"
-import SingleProductImageSwiper from "./swiper"
 import Reviews from "./reviews"
+import SingleProductImageSwiper from "./swiper"
 
-interface SingleProductProps {
+interface SingleProductProps extends React.HTMLAttributes<HTMLDivElement> {
   id: string
 }
 
 const allSizes = ["S", "M", "L", "XL", "XXL"]
 
 const SingleProduct: FC<SingleProductProps> = ({ id }) => {
+  const { wishlist } = useSelector((state: RootState) => state.wishlist)
+  const { user } = useSelector((state: RootState) => state.auth)
+
   const [selectedSize, setSelectedSize] = useState<string | null>(null)
+  const [isAlreadyAddedToWishlist, setIsAlreadyAddedToWishlist] =
+    useState<boolean>(false)
+
+  useEffect(() => {
+    if (wishlist) {
+      if (wishlist?.products?.find((product) => product.productId === id)) {
+        setIsAlreadyAddedToWishlist(true)
+        console.log("there")
+      }
+      console.log("there outside")
+    }
+  }, [id, wishlist])
+
+  const [createWishlistItem, { isLoading: RTKCreateLoading }] =
+    useCreateWishlistItemMutation()
+
+  const [removeWishlistItem,{ isLoading: RTKDeleteLoading }] = useRemoveWishlistItemMutation()
 
   const { data, isLoading } = useQuery({
     queryKey: [`products/${id}`],
@@ -30,6 +58,17 @@ const SingleProduct: FC<SingleProductProps> = ({ id }) => {
         .then((res) => res.data.products)
         .catch((err) => console.log(err)),
   })
+
+  const router = useRouter()
+
+  const handleCreateWishlistItem = async (id: string) => {
+    await createWishlistItem({ productId: id })
+  }
+
+  const handleRemoveWishlistItem = async (id: string) => {
+    await removeWishlistItem(id)
+    setIsAlreadyAddedToWishlist(false)
+  }
 
   const {
     name,
@@ -43,7 +82,7 @@ const SingleProduct: FC<SingleProductProps> = ({ id }) => {
     stock,
     ratings,
     reviews,
-    numberOfReviews
+    numberOfReviews,
   } = data as IProduct
   return (
     <div className="">
@@ -51,15 +90,14 @@ const SingleProduct: FC<SingleProductProps> = ({ id }) => {
         <span>loading</span>
       ) : (
         <>
-          <div className="md:flex">
             <div className="md:hidden">
               <SingleProductImageSwiper
                 photos={photos && photos}
                 productName={name && name}
               />
             </div>
-
-            <div className="container hidden w-1/2 grid-cols-2 gap-2 md:grid lg:w-3/5">
+          <div className="container-lg gap-x-5  md:flex">
+            <div className="hidden w-1/2 grid-cols-2 gap-1 md:grid lg:w-3/5">
               {photos?.map((photo) => (
                 <Image
                   key={photo?.id}
@@ -71,12 +109,31 @@ const SingleProduct: FC<SingleProductProps> = ({ id }) => {
                 />
               ))}
             </div>
-            <div className="container w-full space-y-5 md:w-1/2 lg:w-2/5">
-              <div className="flex items-center gap-x-5">
-                <h3 className="text-xl font-semibold text-foreground">
-                  {name && name}
-                </h3>
-                <p className="text-slate-600 dark:text-slate-300">{category && category}</p>
+            <div className="space-y-5 md:w-2/5 lg:w-2/5 ">
+              <div className="flex justify-between">
+                <div className="space-y-1">
+                  <h3 className="text-xl font-semibold text-foreground">
+                    {name && name}
+                  </h3>
+                  <p className="text-slate-600 dark:text-slate-300">
+                    {category && category}
+                  </p>
+                </div>
+
+                <Icons.favorite
+                  onClick={() =>
+                    user
+                      ? isAlreadyAddedToWishlist
+                        ? handleRemoveWishlistItem(id)
+                        : handleCreateWishlistItem(id)
+                      : router.push("/login")
+                  }
+                  className={cn(
+                    "cursor-pointer transition duration-300 ease-in-out",
+                    isAlreadyAddedToWishlist && "fill-current",
+                    (RTKCreateLoading || RTKDeleteLoading) && 'opacity-50'
+                  )}
+                />
               </div>
 
               <div className="spacing-y-3 ">
@@ -89,7 +146,9 @@ const SingleProduct: FC<SingleProductProps> = ({ id }) => {
                   </button>
                 </div>
                 <div className="space-y-3">
-                  <p className="text-sm text-slate-500 dark:text-slate-400">Waist</p>
+                  <p className="text-sm text-slate-500 dark:text-slate-400">
+                    Waist
+                  </p>
                   <div className="flex flex-wrap items-center space-x-4">
                     {allSizes?.map((value) => (
                       <span
@@ -129,15 +188,22 @@ const SingleProduct: FC<SingleProductProps> = ({ id }) => {
             </div>
           </div>
 
-          <div className="container my-10">
+          <div className="container-lg my-10">
             <div className="space-y-3">
-            <h2 className="text-center text-xl font-bold text-foreground lg:text-3xl">
-              ”Very comfortable. These are one of a kind, great mix of formal
-              and casual.”
-            </h2>
-            <p className="text-center text-sm font-semibold text-slate-400 lg:text-lg"> - by Larry S.</p>
+              <h2 className="text-center text-xl font-bold text-foreground lg:text-3xl">
+                ”Very comfortable. These are one of a kind, great mix of formal
+                and casual.”
+              </h2>
+              <p className="text-center text-sm font-semibold text-slate-400 lg:text-lg">
+                {" "}
+                - by Larry S.
+              </p>
             </div>
-            <Reviews reviews={reviews && reviews} ratings={ratings && ratings} numberOfReviews={numberOfReviews && numberOfReviews} />
+            <Reviews
+              reviews={reviews && reviews}
+              ratings={ratings && ratings}
+              numberOfReviews={numberOfReviews && numberOfReviews}
+            />
           </div>
         </>
       )}

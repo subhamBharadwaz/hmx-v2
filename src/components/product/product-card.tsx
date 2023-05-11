@@ -1,7 +1,8 @@
+
+
 import React, { FC } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { cn } from "@/lib/utils"
 import { IProduct } from "@/types"
 
 interface ProductCardProps {
@@ -12,8 +13,8 @@ interface ProductCardProps {
 const ProductCard: FC<ProductCardProps> = ({ product, isLoading }) => {
   return (
     <Link href={`/products/${product._id}`}>
-      <div className="mx-auto w-full md:min-w-[300px]  xl:max-w-[500px]">
-        <div className="relative h-96 w-full bg-gray-200 md:h-[30rem]">
+      <div className="mx-auto w-full md:min-w-[300px]  xl:max-w-[40rem]">
+        <div className="relative h-96 w-full bg-gray-200 md:h-[30rem] xl:h-[35rem] 2xl:h-[40rem]">
           <Image
             src={product?.photos[0]?.secure_url}
             alt={product?.name}

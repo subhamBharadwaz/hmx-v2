@@ -23,7 +23,7 @@ export default async function MenProductsPage() {
   return (
     <section>
       
-        <h2 className="container my-5 text-center text-xl font-semibold md:text-2xl lg:my-10 lg:text-3xl">Which Jogger is right for you?</h2>
+        <h2 className="container-lg my-5 text-center text-xl font-semibold md:text-2xl lg:my-10 lg:text-3xl">Which Jogger is right for you?</h2>
 
        <div className="container mb-16"  >
         <SwiperCards data={ProductCarousalData}  />
@@ -38,7 +38,7 @@ export default async function MenProductsPage() {
          
           
         </div>
-        <div className="container">
+        <div className="container-lg">
         <Hydrate state={dehydratedState}>
           <ProductSection section="Men" />
         </Hydrate>

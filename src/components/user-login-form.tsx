@@ -19,8 +19,6 @@ import { useDispatch } from "react-redux"
 interface UserLoginFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export const UserLoginForm: FC<UserLoginFormProps> = ({}) => {
-  const [user, setUser] = useState("")
-
   const [errMsg, setErrMsg] = useState("")
   const [login, { isLoading }] = useLoginMutation()
 
@@ -36,18 +34,13 @@ export const UserLoginForm: FC<UserLoginFormProps> = ({}) => {
     resolver: zodResolver(userLoginSchema),
   })
 
-  useEffect(() => {
-    setErrMsg("")
-  }, [user])
-
   async function onSubmit(values: CreateUserLoginInput) {
     try {
       const userData = await login({
         email: values.email,
         password: values.password,
       }).unwrap()
-      dispatch(setCredentials({ ...userData, user }))
-      setUser("")
+      dispatch(setCredentials({ ...userData }))
       router.push("/")
     } catch (error) {
       if (error) {

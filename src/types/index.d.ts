@@ -96,15 +96,15 @@ export enum RatingType {
 
 export interface IReview {
   _id: string
-  user: string,
-  userInfo : {
+  user: string
+  userInfo: {
     firstName: string
-    lastName: string,
-    email: string,
-    photo: string,
-  },
-  rating: number,
-  comment: string,
+    lastName: string
+    email: string
+    photo: string
+  }
+  rating: number
+  comment: string
   date: Date
 }
 
@@ -127,6 +127,25 @@ export interface IProduct {
   numberOfReviews: number
   reviews: IReview[]
   user: string
+  createdAt: Date
+  updatedAt: Date
+}
+
+// Wishlist
+export interface IWishlist {
+  user: string
+  products: {
+    productId: string
+    name: string
+    price: number
+    photos: {
+      id: string
+      secure_url: string
+    }[]
+    size: string[]
+    category: string
+  }[]
+
   createdAt: Date
   updatedAt: Date
 }
