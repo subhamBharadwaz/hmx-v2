@@ -13,7 +13,7 @@ const getProduct = async(id: string)=>{
 
 export default async function ProductPage ({params}: {params:{ id: string}}){
    const queryClient = getQueryClient()
-   await queryClient.prefetchQuery([`products/${params.id}`], ()=> getProduct(params.id))
+   await queryClient.prefetchQuery(['product',params.id], ()=> getProduct(params.id))
    const dehydratedState = dehydrate(queryClient)
    return (<section className=''>
    <div className="">

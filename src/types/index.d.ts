@@ -1,15 +1,17 @@
 import type { Icon } from "lucide-react"
 
+import { Icons } from "@/components/icons"
+
 export type NavItem = {
   title: string
   href: string
+  icon?: Icon
 }
 
 export type MainNavItem = NavItem
 
 export type SidebarNavItem = {
   title: string
-
   icon?: keyof typeof Icons
 } & (
   | {
@@ -18,7 +20,7 @@ export type SidebarNavItem = {
     }
   | {
       href?: string
-      items: NavLink[]
+      items: NavItem[]
     }
 )
 
@@ -146,6 +148,27 @@ export interface IWishlist {
     category: string
   }[]
 
+  createdAt: Date
+  updatedAt: Date
+}
+
+// Bag
+export interface IBag {
+  _id: string
+  user: string
+  products: {
+    productId: string
+    quantity: number
+    name: string
+    size: string
+    price: number
+    photos: {
+      id: string
+      secure_url: string
+    }[]
+  }[]
+
+  totalPrice: number
   createdAt: Date
   updatedAt: Date
 }

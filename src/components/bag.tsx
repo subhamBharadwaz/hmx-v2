@@ -12,12 +12,43 @@ import {
 } from "@/components/ui/sheet"
 
 import BagCard from "./bag-card"
+import { useDispatch, useSelector } from "react-redux"
+import { selectCurrentUser } from "@/store/features/auth/auth-slice"
+import { useGetBagQuery } from "@/store/services/bag"
+import { IBag } from "@/types"
+import { AppDispatch } from "@/store"
+import { useEffect } from "react"
+import { getBag } from "@/store/features/bag/bag-slice"
+import { useRouter } from "next/navigation"
 
 export function Bag() {
+  const dispatch = useDispatch<AppDispatch>()
+
+  const user = useSelector(selectCurrentUser)
+
+  const {data, isSuccess} = useGetBagQuery({})
+
+  useEffect(()=>{
+    if(data){
+      dispatch(getBag(data))
+    }
+  },[data, dispatch])
+
+  const bag: IBag = data
+
+  const router = useRouter()
+
+  
+  const bagTriggerHandler = () => {
+    if (!user) {
+      router.push("/login")
+    }
+  }
+
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <button>
+        <button onClick={bagTriggerHandler}>
           <Icons.bag />
         </button>
       </SheetTrigger>
@@ -29,13 +60,15 @@ export function Bag() {
         <SheetHeader className="mb-10">
           <SheetTitle>Bag</SheetTitle>
         </SheetHeader>
-        <BagCard />
-        <BagCard />
+        {isSuccess && bag?.products?.map(product=>(
+          <BagCard key={product?.productId} product={product}/>
+        ))}
+       
         <SheetFooter className="my-10 align-bottom">
           <div className="w-full space-y-5">
             <div className="flex w-full justify-between border-b border-foreground pb-1">
               <p className="font-semibold text-foreground">Subtotal</p>
-              <p className="font-semibold text-foreground">$367.00</p>
+              <p className="font-semibold text-foreground">Rs. {bag?.totalPrice}</p>
             </div>
             <Button type="submit" className="w-full">
               Checkout

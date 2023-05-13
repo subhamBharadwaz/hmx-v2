@@ -35,16 +35,15 @@ const WishListCard: FC<WishListCardProps> = ({ product }) => {
   return (
     <div className="my-5 flex w-full justify-between gap-x-10 border-b border-slate-200 pb-3 dark:border-slate-700 lg:w-11/12">
       <div className="flex gap-x-5 lg:w-2/3">
-        <div className="relative h-20 w-1/2 ">
-          <Link href={`/products/${product?.productId}`}>
+          <Link href={`/products/${product?.productId}`}className="relative h-20 w-1/2">
             <Image
               src={product?.photos[0]?.secure_url}
               alt={product?.name}
               fill
+              sizes="(max-width: 1280px) 50%"
               className="object-cover"
             />
           </Link>
-        </div>
         <div className="space-y-2">
           <p className="text-sm">
             <Link href={`/products/${product?.productId}`}>

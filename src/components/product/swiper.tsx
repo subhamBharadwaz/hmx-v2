@@ -44,12 +44,12 @@ const SwiperCards: React.FC<SliderProps> = ({ data, className }) => {
               <span className="absolute left-1/2 top-1/2 z-30 -translate-x-1/2 -translate-y-1/2 text-lg text-slate-50 md:text-xl">
                 {slide.category}
               </span>
-
               <Image
                 src={slide.image}
                 alt={slide.title}
                 fill
-                className="z-20 object-cover opacity-70 transition duration-500 ease-in-out group-hover:rotate-2 group-hover:scale-105"
+                className="z-20 rotate-2 scale-105 object-cover opacity-70 transition duration-500 ease-in-out group-hover:rotate-0 group-hover:scale-100"
+                sizes="w-full"
               />
               <div className="h-full w-full bg-slate-950 " />
             </div>

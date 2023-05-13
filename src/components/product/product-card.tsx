@@ -19,12 +19,14 @@ const ProductCard: FC<ProductCardProps> = ({ product, isLoading }) => {
             src={product?.photos[0]?.secure_url}
             alt={product?.name}
             className="object-cover transition duration-500 ease-in-out hover:scale-110 hover:opacity-0"
+            sizes="(max-width: 1280px) 40rem"
             fill
           />
            <Image
             src={product?.photos[1]?.secure_url}
             alt={product?.name}
             className="absolute left-0 top-0 h-auto w-full object-cover opacity-0 transition duration-500 ease-in-out hover:opacity-100"
+            sizes="(max-width: 1280px) 40rem"
             fill
           />
         </div>

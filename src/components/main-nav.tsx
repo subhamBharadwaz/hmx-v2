@@ -26,6 +26,7 @@ interface MainNavProps {
 export function MainNav({ items, children }: MainNavProps) {
   const segment = useSelectedLayoutSegment()
   const [showMobileMenu, setShowMobileMenu] = React.useState<boolean>(false)
+
   const token = useSelector(selectCurrentToken)
   const dispatch = useDispatch<AppDispatch>()
 

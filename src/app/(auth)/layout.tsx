@@ -1,3 +1,4 @@
+import Container from "@/components/container"
 import { MainNav } from "@/components/main-nav"
 import { buttonVariants } from "@/components/ui/button"
 import { eCommerceConfig } from "@/config/ecommerce"
@@ -10,10 +11,12 @@ interface AuthLayoutProps {
 export default function AuthLayout({ children }: AuthLayoutProps) {
   return (
     <div className="min-h-screen">
-      <header className="container z-40 bg-background">
+      <header className="z-40 bg-background">
+        <Container>
         <div className="flex h-20 items-center justify-between py-6">
           <MainNav items={eCommerceConfig.mainNav} />
         </div>
+        </Container>
       </header>
       <main>{children}</main>
     </div>

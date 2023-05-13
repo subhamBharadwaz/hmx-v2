@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation"
 import { Icons } from "@/components/icons"
-import { Button } from "@/components/ui/button"
+
 import {
   Sheet,
   SheetContent,
@@ -11,7 +11,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import { AppDispatch, RootState } from "@/store"
+import { AppDispatch } from "@/store"
 import { selectCurrentToken } from "@/store/features/auth/auth-slice"
 import { useGetWishlistQuery } from "@/store/services/wishlist"
 import { IWishlist } from "@/types"

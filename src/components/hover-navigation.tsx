@@ -81,6 +81,7 @@ export function HoverNavigationMenu() {
                   src={HeroImage1}
                   alt="men"
                   fill
+                  sizes="(max-width: 1280px) 200px"
                   className="object-cover"
                 />
               </div>
@@ -89,6 +90,7 @@ export function HoverNavigationMenu() {
                   src={HeroImage2}
                   alt="men"
                   fill
+                  sizes="(max-width: 1280px) 200px"
                   className="object-cover"
                 />
               </div>

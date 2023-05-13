@@ -4,8 +4,10 @@ import { FC, useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import Alert from "@/components/alert"
+import Container from "@/components/container"
 import { Icons } from "@/components/icons"
-import { buttonVariants } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { RootState } from "@/store"
 import {
@@ -20,6 +22,7 @@ import { useSelector } from "react-redux"
 import ProductInfoAccordion from "./product-info-accordion"
 import Reviews from "./reviews"
 import SingleProductImageSwiper from "./swiper"
+import { useCreateBagItemMutation } from "@/store/services/bag"
 
 interface SingleProductProps extends React.HTMLAttributes<HTMLDivElement> {
   id: string
@@ -34,40 +37,53 @@ const SingleProduct: FC<SingleProductProps> = ({ id }) => {
   const [selectedSize, setSelectedSize] = useState<string | null>(null)
   const [isAlreadyAddedToWishlist, setIsAlreadyAddedToWishlist] =
     useState<boolean>(false)
+    const [isSizeEmpty, setIsSizeEmpty] = useState<boolean | null>(null);
 
   useEffect(() => {
     if (wishlist) {
       if (wishlist?.products?.find((product) => product.productId === id)) {
         setIsAlreadyAddedToWishlist(true)
-        console.log("there")
       }
-      console.log("there outside")
     }
   }, [id, wishlist])
+
+  const { data, isLoading } = useQuery({
+    queryKey: ['product', id],
+    queryFn: async() => {
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/product/${id}`)
+      return res.data.product
+    }
+  })
+
 
   const [createWishlistItem, { isLoading: RTKCreateLoading }] =
     useCreateWishlistItemMutation()
 
-  const [removeWishlistItem,{ isLoading: RTKDeleteLoading }] = useRemoveWishlistItemMutation()
+    const [createBagItem] = useCreateBagItemMutation()
 
-  const { data, isLoading } = useQuery({
-    queryKey: [`products/${id}`],
-    queryFn: () =>
-      axios
-        .get(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/product/${id}`)
-        .then((res) => res.data.products)
-        .catch((err) => console.log(err)),
-  })
+  const [removeWishlistItem, { isLoading: RTKDeleteLoading }] =
+    useRemoveWishlistItemMutation()
 
+ 
   const router = useRouter()
 
   const handleCreateWishlistItem = async (id: string) => {
     await createWishlistItem({ productId: id })
   }
 
+  const handleCreateBagItem = async(id: string, size: string)=>{
+    await createBagItem({productId: id, size, quantity: 1})
+  }
+
   const handleRemoveWishlistItem = async (id: string) => {
     await removeWishlistItem(id)
     setIsAlreadyAddedToWishlist(false)
+  }
+
+  const handleSizeSelection = (value: string)=>{
+    setSelectedSize(value)
+    setIsSizeEmpty(false)
+    console.log(value)
   }
 
   const {
@@ -86,18 +102,14 @@ const SingleProduct: FC<SingleProductProps> = ({ id }) => {
   } = data as IProduct
   return (
     <div className="">
-      {isLoading ? (
-        <span>loading</span>
-      ) : (
-        <>
-            <div className="md:hidden">
-              <SingleProductImageSwiper
-                photos={photos && photos}
-                productName={name && name}
-              />
-            </div>
-          <div className="container-lg gap-x-5  md:flex">
-            <div className="hidden w-1/2 grid-cols-2 gap-1 md:grid lg:w-3/5">
+          <div className="lg:hidden">
+            <SingleProductImageSwiper
+              photos={photos && photos}
+              productName={name && name}
+            />
+          </div>
+          <Container className="gap-x-5 lg:flex">
+            <div className="hidden w-1/2 grid-cols-2 gap-1 lg:grid lg:w-3/5 xl:w-3/4">
               {photos?.map((photo) => (
                 <Image
                   key={photo?.id}
@@ -105,7 +117,7 @@ const SingleProduct: FC<SingleProductProps> = ({ id }) => {
                   alt={name && name}
                   width={400}
                   height={500}
-                  className="object-cover xl:h-[600px] xl:w-[600px]"
+                  className="object-cover xl:h-[40rem] xl:w-[45rem] 2xl:h-[45rem] 2xl:w-[50rem]"
                 />
               ))}
             </div>
@@ -131,7 +143,7 @@ const SingleProduct: FC<SingleProductProps> = ({ id }) => {
                   className={cn(
                     "cursor-pointer transition duration-300 ease-in-out",
                     isAlreadyAddedToWishlist && "fill-current",
-                    (RTKCreateLoading || RTKDeleteLoading) && 'opacity-50'
+                    (RTKCreateLoading || RTKDeleteLoading) && "opacity-50"
                   )}
                 />
               </div>
@@ -161,7 +173,7 @@ const SingleProduct: FC<SingleProductProps> = ({ id }) => {
                           selectedSize === value &&
                             "bg-slate-900 text-slate-100 ring ring-slate-700 ring-offset-2 dark:bg-slate-100 dark:text-slate-900 dark:ring-slate-700"
                         )}
-                        onClick={() => setSelectedSize(value)}
+                        onClick={() => handleSizeSelection(value)}
                         style={
                           !size?.some((s) => s === value)
                             ? { pointerEvents: "none", cursor: "not-allowed" }
@@ -174,21 +186,29 @@ const SingleProduct: FC<SingleProductProps> = ({ id }) => {
                   </div>
                 </div>
               </div>
-              <Link
-                href="#"
-                className={cn(buttonVariants({ size: "lg" }), "w-full")}
+             {isSizeEmpty && (
+               <Alert variant="destructive" title="Please select a size!" description="You cannot add an item to bag without selecting the size." />
+             )}
+              <Button
+                size='lg'
+                className="w-full"
+                onClick={()=>  user
+                  ? isSizeEmpty || selectedSize === null
+                    ? setIsSizeEmpty(true)
+                    : handleCreateBagItem(id, selectedSize)
+                  : router.push("/login")}
               >
                 Add to Bag
-              </Link>
+              </Button>
 
               <ProductInfoAccordion
                 details={detail && detail}
                 description={description && description}
               />
             </div>
-          </div>
+          </Container>
 
-          <div className="container-lg my-10">
+          <Container className="my-10">
             <div className="space-y-3">
               <h2 className="text-center text-xl font-bold text-foreground lg:text-3xl">
                 ”Very comfortable. These are one of a kind, great mix of formal
@@ -204,9 +224,7 @@ const SingleProduct: FC<SingleProductProps> = ({ id }) => {
               ratings={ratings && ratings}
               numberOfReviews={numberOfReviews && numberOfReviews}
             />
-          </div>
-        </>
-      )}
+          </Container>
     </div>
   )
 }

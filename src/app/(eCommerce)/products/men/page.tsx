@@ -1,3 +1,4 @@
+import Container from "@/components/container"
 import ProductSection from "@/components/product/section"
 
 import SwiperCards from "@/components/product/swiper"
@@ -23,11 +24,11 @@ export default async function MenProductsPage() {
   return (
     <section>
       
-        <h2 className="container-lg my-5 text-center text-xl font-semibold md:text-2xl lg:my-10 lg:text-3xl">Which Jogger is right for you?</h2>
+        <h2 className="mx-auto my-5 max-w-[120rem] px-8 text-center text-xl font-semibold md:text-2xl lg:my-10 lg:text-3xl">Which Jogger is right for you?</h2>
 
-       <div className="container mb-16"  >
+       <Container className=" mb-16"  >
         <SwiperCards data={ProductCarousalData}  />
-        </div>
+        </Container>
 
         <div className="mb-16 flex h-56 w-full flex-col items-center justify-center gap-y-10 bg-zinc-800 dark:bg-slate-100 lg:h-72">
           <p className="font-serif text-2xl tracking-tighter text-slate-200 dark:text-slate-600 lg:text-4xl">&quot;A Swiss Army knife for your closet.&quot;</p>
@@ -38,11 +39,11 @@ export default async function MenProductsPage() {
          
           
         </div>
-        <div className="container-lg">
+        <Container>
         <Hydrate state={dehydratedState}>
           <ProductSection section="Men" />
         </Hydrate>
-        </div>
+        </Container>
    
     </section>
   )

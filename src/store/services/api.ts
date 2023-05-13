@@ -39,7 +39,7 @@ const baseQueryWithReAuth = async (args: any, api: any, extraOptions: any) => {
 
 export const apiSlice = createApi({
   baseQuery: baseQueryWithReAuth,
-  tagTypes: ['Wishlist'],
+  tagTypes: ['Wishlist', 'Bag'],
   endpoints: (builder) => ({
     noop: builder.query({
       query: () => {},
