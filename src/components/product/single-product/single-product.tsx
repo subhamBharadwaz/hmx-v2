@@ -117,7 +117,7 @@ const SingleProduct: FC<SingleProductProps> = ({ id }) => {
                   alt={name && name}
                   width={400}
                   height={500}
-                  className="object-cover xl:h-[40rem] xl:w-[45rem] 2xl:h-[45rem] 2xl:w-[50rem]"
+                  className="border border-slate-100 object-cover shadow-lg shadow-slate-100/50 dark:border-slate-800 dark:shadow-none xl:h-[40rem] xl:w-[45rem] 2xl:h-[45rem] 2xl:w-[50rem]"
                 />
               ))}
             </div>

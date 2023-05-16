@@ -1,8 +1,20 @@
 "use client"
 
-import { createContext, useState } from "react"
+import { createContext, useState, Dispatch, SetStateAction } from "react"
 
-const AuthContext = createContext({})
+interface AuthContextProps {
+  auth: any;
+  setAuth: Dispatch<SetStateAction<any>>;
+  persist: boolean;
+  setPersist: Dispatch<SetStateAction<boolean>>;
+}
+
+const AuthContext = createContext<AuthContextProps>({
+  auth: {},
+  setAuth: () => {},
+  persist: false,
+  setPersist: () => {},
+});
 
 let persistedData: string | null
 

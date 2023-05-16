@@ -1,16 +1,19 @@
 import { useEffect } from "react"
 import Image from "next/image"
+import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { store } from "@/store"
-
 
 import Banner from "../../../public/images/banner.webp"
 import Jogger1 from "../../../public/images/hero1.webp"
 import Jogger2 from "../../../public/images/hero2.webp"
-import { AspectRatio } from "@/components/ui/aspect-ratio"
 
+import { getCurrentUser } from "@/lib/session"
 
+export default  async function Home() {
+  const session = await getCurrentUser()
 
-export default function Home() {
+  console.log({session})
+
   return (
     <section className="">
       <div className="relative">
@@ -19,9 +22,9 @@ export default function Home() {
         </h1>
         <AspectRatio ratio={16 / 9} className="max-h-[70vh]">
           <Image src={Banner} alt="banner" fill />
-        </AspectRatio>     
+        </AspectRatio>
       </div>
-      <div></div>
+     <p className="text-4xl text-slate-700"><pre>{JSON.stringify(session, null, 2)}</pre></p>
     </section>
   )
 }

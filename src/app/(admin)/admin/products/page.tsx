@@ -1,5 +1,5 @@
-export default function ProductsPage(){
-    return (
-        <div>Products</div>
-    )
+import Products from "@/components/admin/products/products"
+
+export default function AdminProductsPage() {
+  return <Products />
 }

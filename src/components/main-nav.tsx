@@ -7,16 +7,13 @@ import { Icons } from "@/components/icons"
 import { MobileNav } from "@/components/mobile-nav"
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
-import { AppDispatch } from "@/store"
-import { logout, selectCurrentToken } from "@/store/features/auth/auth-slice"
 import { MainNavItem } from "@/types"
-import { useDispatch, useSelector } from "react-redux"
-
 import { Bag } from "./bag"
 import { HoverNavigationMenu } from "./hover-navigation"
 import { ModeToggle } from "./mode-toggle"
 import { Button, buttonVariants } from "./ui/button"
 import { WishList } from "./wishlist"
+import { signOut, useSession } from "next-auth/react"
 
 interface MainNavProps {
   items?: MainNavItem[]
@@ -27,8 +24,7 @@ export function MainNav({ items, children }: MainNavProps) {
   const segment = useSelectedLayoutSegment()
   const [showMobileMenu, setShowMobileMenu] = React.useState<boolean>(false)
 
-  const token = useSelector(selectCurrentToken)
-  const dispatch = useDispatch<AppDispatch>()
+
 
   return (
     <nav className="flex w-full justify-between gap-6 md:gap-10">
@@ -41,7 +37,7 @@ export function MainNav({ items, children }: MainNavProps) {
       <div className="hidden gap-6 md:flex">
         <WishList />
         <Bag />
-        {!token ? (
+      
           <Link
             href="/login"
             className={cn(
@@ -51,15 +47,15 @@ export function MainNav({ items, children }: MainNavProps) {
           >
             Login
           </Link>
-        ) : (
+      
           <Button
             size="sm"
             variant="outline"
-            onClick={() => dispatch(logout())}
+            onClick={() => signOut() }
           >
             Logout
           </Button>
-        )}
+       
         <ModeToggle />
       </div>
       <button

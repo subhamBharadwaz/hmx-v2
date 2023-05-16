@@ -11,37 +11,21 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import { AppDispatch } from "@/store"
-import { selectCurrentToken } from "@/store/features/auth/auth-slice"
-import { useGetWishlistQuery } from "@/store/services/wishlist"
+
 import { IWishlist } from "@/types"
-import { useDispatch, useSelector } from "react-redux"
+
 
 import WishListCard from "./wishlist-card"
-import { useEffect } from "react"
-import { getWishlist } from "@/store/features/wishlist/wishlist-slice"
+
 
 export function WishList() {
-  const dispatch = useDispatch<AppDispatch>()
 
-  const token = useSelector(selectCurrentToken)
-
-  const { data, isSuccess,isLoading } = useGetWishlistQuery({})
-  const wishlist: IWishlist = data
-  
-  useEffect(()=>{
-    if(data){
-      dispatch(getWishlist(data))
-    }
-  },[data, dispatch])
 
 
   const router = useRouter()
 
   const wishlistTriggerHandler = () => {
-    if (!token) {
-      router.push("/login")
-    }
+   
   }
 
 
@@ -60,10 +44,10 @@ export function WishList() {
         <SheetHeader className="mb-10">
           <SheetTitle>WishList</SheetTitle>
         </SheetHeader>
-        {isSuccess &&
-          wishlist?.products?.map((product) => (
-            <WishListCard key={product?.productId} product={product} />
-          ))}
+    
+        
+            {/* <WishListCard key={product?.productId} product={product} /> */}
+       
         <SheetFooter className="my-10 align-bottom">
           <div className="w-full space-y-5">
             <div className="w-full space-y-10 rounded-md bg-orange-50 p-5">

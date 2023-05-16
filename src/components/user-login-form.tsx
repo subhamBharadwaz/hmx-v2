@@ -1,30 +1,28 @@
 "use client"
 
-import { FC, useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
+import { FC, useState } from "react"
+import { useSearchParams } from "next/navigation"
 import { Icons } from "@/components/icons"
 import { buttonVariants } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { toast } from "@/components/ui/use-toast"
+import { signIn } from "next-auth/react"
 import { cn } from "@/lib/utils"
 import { CreateUserLoginInput, userLoginSchema } from "@/lib/validations/auth"
-import { AppDispatch, store } from "@/store"
-import { setCredentials } from "@/store/features/auth/auth-slice"
-import { useLoginMutation } from "@/store/services/auth"
+
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { useDispatch } from "react-redux"
+
 
 interface UserLoginFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export const UserLoginForm: FC<UserLoginFormProps> = ({}) => {
-  const [errMsg, setErrMsg] = useState("")
-  const [login, { isLoading }] = useLoginMutation()
 
-  const router = useRouter()
+  const [isLoading, setIsLoading] =useState<boolean>(false)
 
-  const dispatch = useDispatch<AppDispatch>()
+  const searchParams = useSearchParams()
+
 
   const {
     register,
@@ -35,18 +33,29 @@ export const UserLoginForm: FC<UserLoginFormProps> = ({}) => {
   })
 
   async function onSubmit(values: CreateUserLoginInput) {
-    try {
-      const userData = await login({
-        email: values.email,
-        password: values.password,
-      }).unwrap()
-      dispatch(setCredentials({ ...userData }))
-      router.push("/")
-    } catch (error) {
-      if (error) {
-        setErrMsg("err")
-      }
+    setIsLoading(true)
+
+    const signInResult = await signIn("credentials", {
+      email: values.email,
+      password: values.password,
+      redirect: true,
+      callbackUrl: searchParams?.get("from") || "/",
+    })
+
+    setIsLoading(false)
+
+    if (!signInResult?.ok) {
+      return toast({
+        title: "Something went wrong.",
+        description: "Your sign in request failed. Please try again.",
+        variant: "destructive",
+      })
     }
+
+    return toast({
+      title: "Check your email",
+      description: "We sent you a login link. Be sure to check your spam too.",
+    })
   }
 
   return (
