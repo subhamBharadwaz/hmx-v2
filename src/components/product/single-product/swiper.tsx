@@ -34,11 +34,12 @@ const SingleProductImageSwiper: React.FC<SliderProps> = ({ photos, productName,c
     >
       {photos?.map((photo) => (
         <SwiperSlide key={photo.id} className="group" >
-          <div className="relative mb-10 h-[80vh] w-full">   
+          <div className="relative mb-10 h-[80vh] w-full md:h-[85vh]">   
             <Image
               src={photo.secure_url}
               alt={productName}
               fill
+              sizes="(max-width:768px) 85vh"
               className="cursor-grabbing object-cover"
             />
         </div>

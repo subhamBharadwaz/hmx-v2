@@ -27,7 +27,7 @@ const ProductSection: FC<ProductSectionProps> = ({section}) => {
       ) : (
         <div className="mx-auto grid grid-cols-1 gap-x-4 gap-y-10 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
           {(data as IProduct[])?.map((product) => (
-            <ProductCard product={product} isLoading={isLoading} />
+            <ProductCard key={product?._id} product={product} isLoading={isLoading} />
           ))}
         </div>
       )}

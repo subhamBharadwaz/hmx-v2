@@ -2,6 +2,7 @@ import { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
 import { UserLoginForm } from "@/components/user-login-form"
+import Container from '@/components/container'
 
 import Saly from "../../../../public/images/Saly.png"
 
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function LoginPage() {
   return (
-    <section className="container  flex min-h-[80vh] items-center justify-between">
+    <Container className="flex min-h-[80vh] items-center justify-between">
       <div className="relative w-1/2">
         <h2 className="text-5xl font-bold leading-relaxed">
           Step into Comfort <br className="hidden sm:inline" />
@@ -34,6 +35,6 @@ export default function LoginPage() {
         <h2 className="mb-10 text-center text-3xl font-bold">Login</h2>
         <UserLoginForm />
       </div>
-    </section>
+    </Container>
   )
 }

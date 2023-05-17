@@ -1,15 +1,16 @@
+import { Icons } from "@/components/icons"
 import type { Icon } from "lucide-react"
 
 export type NavItem = {
   title: string
   href: string
+  icon?: Icon
 }
 
 export type MainNavItem = NavItem
 
 export type SidebarNavItem = {
   title: string
-
   icon?: keyof typeof Icons
 } & (
   | {
@@ -18,7 +19,7 @@ export type SidebarNavItem = {
     }
   | {
       href?: string
-      items: NavLink[]
+      items: NavItem[]
     }
 )
 
@@ -56,11 +57,6 @@ export interface IUser {
   }
   phoneNumber: string
   role?: ROLE
-  forgotPasswordToken?: string
-  forgotPasswordExpiry?: number
-  createdAt?: Date
-  updatedAt?: Date
-  token?: string
 }
 
 // Product Types
@@ -133,19 +129,86 @@ export interface IProduct {
 
 // Wishlist
 export interface IWishlist {
+  productId: string
+  name: string
+  price: number
+  photos: {
+    id: string
+    secure_url: string
+  }[]
+  size: string[]
+  category: string
+}
+
+// Bag
+export interface IBag {
+  _id: string
   user: string
   products: {
     productId: string
+    quantity: number
     name: string
+    size: string
     price: number
     photos: {
       id: string
       secure_url: string
     }[]
-    size: string[]
-    category: string
   }[]
 
+  totalPrice: number
   createdAt: Date
   updatedAt: Date
+}
+
+// Order
+export enum OrderStatusType {
+  Processing = "Processing",
+  Shipped = "Shipped",
+  OutForDelivery = "Out for delivery",
+  Delivered = "Delivered",
+}
+
+export interface IOrder {
+  _id?: string;
+  shippingInfo: {
+    firstName: string;
+    lastName: string;
+    houseNo: string;
+    streetName: string;
+    landMark: string;
+    postalCode: string;
+    city: string;
+    country: string;
+    state: string;
+    phoneNumber: string;
+  };
+  orderItems: {
+    _id?: string;
+    name: string;
+    size: string;
+    quantity: number;
+    image: string;
+    price: number;
+    product: string;
+  }[];
+  paymentInfo: {
+    id: string;
+  };
+  taxAmount: number;
+  shippingAmount: number;
+  totalAmount: number;
+  orderStatus?: OrderStatusType;
+  createdAt?: Date;
+}
+
+
+// Admin
+export interface IAdminProducts {
+  productCount: number
+  total: number
+  limit: number
+  page: number
+  products: IProduct[]
+  pageCount: number
 }

@@ -7,10 +7,8 @@ import { Icons } from "@/components/icons"
 import { MobileNav } from "@/components/mobile-nav"
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
-import { AppDispatch } from "@/store"
-import { logout, selectCurrentToken } from "@/store/features/auth/auth-slice"
 import { MainNavItem } from "@/types"
-import { useDispatch, useSelector } from "react-redux"
+import { signOut, useSession } from "next-auth/react"
 
 import { Bag } from "./bag"
 import { HoverNavigationMenu } from "./hover-navigation"
@@ -21,13 +19,14 @@ import { WishList } from "./wishlist"
 interface MainNavProps {
   items?: MainNavItem[]
   children?: React.ReactNode
+  accessToken: string | undefined
 }
 
-export function MainNav({ items, children }: MainNavProps) {
+export function MainNav({ items, children, accessToken }: MainNavProps) {
   const segment = useSelectedLayoutSegment()
   const [showMobileMenu, setShowMobileMenu] = React.useState<boolean>(false)
-  const token = useSelector(selectCurrentToken)
-  const dispatch = useDispatch<AppDispatch>()
+
+  const { data: session } = useSession()
 
   return (
     <nav className="flex w-full justify-between gap-6 md:gap-10">
@@ -38,9 +37,9 @@ export function MainNav({ items, children }: MainNavProps) {
       </Link>
       <HoverNavigationMenu />
       <div className="hidden gap-6 md:flex">
-        <WishList />
-        <Bag />
-        {!token ? (
+        <WishList accessToken={accessToken} />
+        <Bag accessToken={accessToken} />
+        {!session?.user.user ? (
           <Link
             href="/login"
             className={cn(
@@ -51,11 +50,7 @@ export function MainNav({ items, children }: MainNavProps) {
             Login
           </Link>
         ) : (
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => dispatch(logout())}
-          >
+          <Button size="sm" variant="outline" onClick={() => signOut()}>
             Logout
           </Button>
         )}

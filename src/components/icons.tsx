@@ -17,6 +17,8 @@ import {
   Moon,
   MoreVertical,
   Pizza,
+  LayoutDashboard,
+  LineChart,
   Plus,
   Settings,
   ShoppingBag,
@@ -25,7 +27,9 @@ import {
   Truck,
   Twitter,
   User,
+  Shirt,
   X,
+  RefreshCcw,
   type Icon as LucideIcon,
 } from "lucide-react"
 
@@ -35,6 +39,8 @@ export const Icons = {
   logo: Command,
   close: X,
   spinner: Loader2,
+  dashboard: LayoutDashboard,
+  product: Shirt,
   chevronLeft: ChevronLeft,
   chevronRight: ChevronRight,
   favorite: Heart,
@@ -43,10 +49,12 @@ export const Icons = {
   post: FileText,
   page: File,
   media: Image,
+  order: Truck,
   settings: Settings,
   billing: CreditCard,
   ellipsis: MoreVertical,
   add: Plus,
+  chart: LineChart,
   shipping: Truck,
   warning: AlertTriangle,
   user: User,
@@ -54,6 +62,7 @@ export const Icons = {
   help: HelpCircle,
   pizza: Pizza,
   sun: SunMedium,
+  loader: RefreshCcw,
   moon: Moon,
   solidStar: ({ ...props }: LucideProps) => (
     <svg

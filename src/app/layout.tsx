@@ -2,7 +2,7 @@ import { Inter as FontSans } from "next/font/google"
 import localFont from "next/font/local"
 
 import "./globals.css"
-import { Providers } from "@/lib/providers"
+import { Providers } from "@/components/providers"
 import { cn } from "@/lib/utils"
 
 const fontSans = FontSans({
@@ -26,6 +26,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+
   return (
     <html lang="en">
       <head />

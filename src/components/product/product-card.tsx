@@ -14,17 +14,20 @@ const ProductCard: FC<ProductCardProps> = ({ product, isLoading }) => {
   return (
     <Link href={`/products/${product._id}`}>
       <div className="mx-auto w-full md:min-w-[300px]  xl:max-w-[40rem]">
-        <div className="relative h-96 w-full bg-gray-200 md:h-[30rem] xl:h-[35rem] 2xl:h-[40rem]">
+        <div className="relative h-96 w-full border border-slate-100  shadow-lg shadow-slate-100/50 dark:border-slate-800 dark:shadow-none md:h-[30rem] xl:h-[35rem] 2xl:h-[40rem]">
           <Image
             src={product?.photos[0]?.secure_url}
             alt={product?.name}
-            className="object-cover transition duration-500 ease-in-out hover:scale-110 hover:opacity-0"
+            className="object-cover opacity-0 blur-sm transition duration-500 ease-in-out hover:scale-110 hover:opacity-0"
+            sizes="(max-width: 1280px) 40rem"
             fill
+            onLoadingComplete={(image)=> image.classList.remove('opacity-0' ,'blur-sm')}
           />
            <Image
             src={product?.photos[1]?.secure_url}
             alt={product?.name}
             className="absolute left-0 top-0 h-auto w-full object-cover opacity-0 transition duration-500 ease-in-out hover:opacity-100"
+            sizes="(max-width: 1280px) 40rem"
             fill
           />
         </div>
