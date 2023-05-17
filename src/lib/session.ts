@@ -6,5 +6,5 @@ export async function getCurrentUser() {
   const session = await getServerSession(authOptions)
   console.log({serverSession: session})
 
-  return session
+  return session?.user
 }
