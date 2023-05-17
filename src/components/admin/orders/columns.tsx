@@ -9,60 +9,99 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { IProduct } from "@/types"
+import { IOrder } from "@/types"
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown, MoreHorizontal } from "lucide-react"
 
 import { DataTableColumnHeader } from "./data-table-column-header"
-import Image from "next/image"
+import {format} from 'date-fns'
+import { Badge } from "@/components/ui/badge"
 
-interface Photo {
-  secure_url: string,
-  id: string
-}
 
-export const columns: ColumnDef<IProduct>[] = [
+type ShippingInfoType = IOrder['shippingInfo']; 
+type OrderItemsType = IOrder['orderItems']; 
+
+
+export const columns: ColumnDef<IOrder>[] = [
   {
-    accessorKey: "photos",
-    header: "Product",
+    accessorKey: "_id",
+    header: "Order Number",
+  },
+  {
+    accessorKey: "createdAt",
+    header: "Created at",
+    cell: ({row})=> {
+      const date: Date = row.getValue("createdAt")
+      return <p>{format(new Date(date), 'dd.MM.yyyy')}</p>
+    }
+  },
+  {
+    accessorKey: "shippingInfo",
+    header: 'Customer',
     cell: ({ row }) => {
-      const photos: Photo[] = row.getValue("photos")
+      const shippingInfo: ShippingInfoType = row.getValue("shippingInfo")
       return (
-        <Image src={photos[0].secure_url} alt='Product' width={50} height={50} className="object-cover"/>
+       <p>{`${shippingInfo?.firstName} ${shippingInfo?.lastName}`}</p>
       )
     },
   },
   {
-    accessorKey: "name",
-    header: "Product Name",
+    accessorKey: "orderItems",
+    header: 'Product(s)',
+    cell: ({ row }) => {
+      const orderItems: OrderItemsType = row.getValue("orderItems")
+      return (
+      <p>{orderItems?.map(item=> item?.name).join(", ")}</p>
+      )
+    },
   },
   {
-    accessorKey: "category",
-    header: "Category",
+    accessorKey: "shippingInfo",
+    header: 'Destination',
+    cell: ({ row }) => {
+      const shippingInfo: ShippingInfoType = row.getValue("shippingInfo")
+      return (
+      <p>{`${shippingInfo?.streetName}, ${shippingInfo?.city}`}</p>
+      )
+    },
   },
   {
-    accessorKey: "stock",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Stock" />
-    ),
-  },
-  {
-    accessorKey: "price",
+    accessorKey: "totalAmount",
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
-        className="justify-end"
         title="Price"
       />
     ),
     cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("price"))
+      const amount = parseFloat(row.getValue("totalAmount"))
       const formatted = new Intl.NumberFormat("en-IN", {
         style: "currency",
         currency: "INR",
       }).format(amount)
 
       return <div className="text-right font-medium">{formatted}</div>
+    },
+  },
+  {
+    accessorKey: "orderStatus",
+    header: 'Status',
+    cell: ({ row }) => {
+      const status: string = row.getValue("orderStatus")
+      return (
+        <Badge
+        className="justify-end"
+        variant={
+          status === "Delivered"
+            ? "success"
+            : status === "Processing"
+            ? "warning"
+            : "secondary"
+        }
+      >
+        {status}
+      </Badge>
+      )
     },
   },
   {

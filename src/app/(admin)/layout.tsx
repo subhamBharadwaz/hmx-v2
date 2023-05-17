@@ -15,17 +15,17 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-40 bg-background">
         <Container className="flex h-20 items-center space-x-4 sm:justify-between sm:space-x-0">
-          <MainNav items={adminConfig.mainNav}>
-            <AdminSidebarNav items={adminConfig.sidebarNav} />
-          </MainNav>
+          {/* <MainNav items={adminConfig.mainNav} /> */}
         </Container>
       </header>
-      <Container className="grid w-full flex-1 gap-12 md:grid-cols-[200px_1fr]">
+      <div className="container grid flex-1 gap-12 md:grid-cols-[200px_1fr]">
         <aside className="hidden w-[200px] flex-col md:flex">
           <AdminSidebarNav items={adminConfig.sidebarNav} />
         </aside>
-        <main className="w-full">{children}</main>
-      </Container>
+        <main className="flex w-full flex-1 flex-col overflow-hidden">
+          {children}
+        </main>
+      </div>
     </div>
   )
 }
