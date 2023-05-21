@@ -8,6 +8,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import axios from "axios"
 
 import { Icons } from "./icons"
+import { useStore } from "@/store"
 
 interface Product {
   productId: string
@@ -27,6 +28,7 @@ interface WishListCardProps {
 
 const WishListCard: FC<WishListCardProps> = ({ product, accessToken }) => {
   const queryClient = useQueryClient()
+  const {setIsAlreadyAddedToWishlist} = useStore()
 
   const deleteProductFromWishlistHandler = async (productId: string) => {
     if (accessToken) {
@@ -38,13 +40,14 @@ const WishListCard: FC<WishListCardProps> = ({ product, accessToken }) => {
           },
         }
       )
-      return res?.data.products
+      return await res?.data.products
     }
   }
   const deleteProductToWishlistMutation = useMutation({
     mutationFn: deleteProductFromWishlistHandler,
     onSuccess: (data) => {
-      queryClient.setQueriesData(["wishlist"], data)
+      queryClient.setQueriesData(["wishlist"],data)
+      setIsAlreadyAddedToWishlist(false)
     },
   })
 

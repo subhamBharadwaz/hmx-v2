@@ -3,7 +3,7 @@
 import { FC } from "react"
 import { useRouter } from "next/navigation"
 import { Icons } from "@/components/icons"
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import {
   Sheet,
   SheetContent,
@@ -18,6 +18,8 @@ import axios from "axios"
 import { useSession } from "next-auth/react"
 
 import BagCard from "./bag-card"
+import Link from "next/link"
+import { cn } from "@/lib/utils"
 
 interface BagProps {
   accessToken: string | undefined
@@ -27,7 +29,7 @@ export const Bag: FC<BagProps> = ({ accessToken }) => {
   const { data: session } = useSession()
   const router = useRouter()
 
-  const { data, isLoading } = useQuery<IBag>({
+  const { data: bag, isLoading } = useQuery<IBag>({
     queryKey: ["bag"],
     queryFn: async () => {
       if (accessToken) {
@@ -53,9 +55,9 @@ export const Bag: FC<BagProps> = ({ accessToken }) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <button onClick={bagTriggerHandler}>
+        <Button onClick={bagTriggerHandler} variant='link' size='sm'>
           <Icons.bag />
-        </button>
+        </Button>
       </SheetTrigger>
       {session?.user && (
         <SheetContent
@@ -67,24 +69,38 @@ export const Bag: FC<BagProps> = ({ accessToken }) => {
             <SheetTitle>Bag</SheetTitle>
           </SheetHeader>
 
-          {isLoading ? (
-            <p>loading...</p>
-          ) : (
-            data?.products?.map((product) => (
-              <BagCard key={product?.productId} product={product} accessToken={accessToken} />
+          {bag ? (
+            
+            bag?.products?.map((product) => (
+              <BagCard
+                key={product?.productId}
+                product={product}
+                accessToken={accessToken}
+              />
             ))
+          ) : (
+            <div className="flex h-[20rem] w-full flex-col items-center justify-center gap-y-10 ">
+            <p className="text-xl text-slate-500 md:text-2xl">Your bag is empty!</p>
+            <p className="text-xl text-slate-400 md:text-2xl">Explore more and shortlist some items</p>
+            <Link href='/products' className={cn(buttonVariants({size: 'lg'}), 'mx-auto')}>continue shopping</Link>
+          </div>
           )}
 
           <SheetFooter className="my-10 align-bottom">
             <div className="w-full space-y-5">
-              <div className="flex w-full justify-between border-b border-foreground pb-1">
-                <p className="font-semibold text-foreground">Subtotal</p>
-                {/* //TODO */}
-                {/* <p className="font-semibold text-foreground">Rs. {bag?.totalPrice}</p> */}
-              </div>
-              <Button type="submit" className="w-full">
-                Checkout
-              </Button>
+             {bag && (
+              <>
+               <div className="flex w-full justify-between border-b border-foreground pb-1">
+               <p className="font-semibold text-foreground">Subtotal</p>
+               <p className="font-semibold text-foreground">
+                 Rs. {bag?.totalPrice}
+               </p>
+             </div>
+             <Link href='/checkout' className={cn(buttonVariants({size:'lg'}), 'w-full')}>
+               Checkout
+             </Link>
+             </>
+             )}
               <div className="w-full space-y-10 rounded-md bg-orange-50 p-5">
                 <div className="flex items-center justify-between gap-x-5">
                   <p className="font-serif text-lg text-slate-900">VOGUE</p>

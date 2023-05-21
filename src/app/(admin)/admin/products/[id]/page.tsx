@@ -1,4 +1,4 @@
-import { dehydrate } from "@tanstack/react-query"
+import { dehydrate } from "@tanstack/query-core"
 import getQueryClient from "@/lib/getQueryClient"
 import Hydrate from "@/lib/HydrateClient"
 import axios from 'axios'
@@ -25,7 +25,7 @@ export default async function ProductPage ({params}: {params:{ id: string}}){
    <div className="">
        <Hydrate state={dehydratedState}>
          <div>
-            {/* <SingleProduct id={params.id} accessToken={user?.accessToken}/> */}
+            {/* <P id={params.id} accessToken={user?.accessToken}/> */}
          </div>
        </Hydrate>
    </div>

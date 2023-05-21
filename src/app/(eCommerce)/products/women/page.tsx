@@ -6,7 +6,7 @@ import SwiperCards from "@/components/product/swiper"
 import { ProductCarousalData } from "@/constants"
 import Hydrate from "@/lib/HydrateClient"
 import getQueryClient from "@/lib/getQueryClient"
-import { dehydrate } from "@tanstack/react-query"
+import { dehydrate } from "@tanstack/query-core"
 import axios from "axios"
 
 

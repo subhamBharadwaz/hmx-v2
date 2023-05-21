@@ -1,8 +1,11 @@
 import Products from "@/components/admin/products/products"
+import { Button } from "@/components/ui/button"
 import getQueryClient from "@/lib/getQueryClient"
 import { getCurrentUser } from "@/lib/session"
-import { Hydrate, dehydrate } from "@tanstack/react-query"
+import { dehydrate } from "@tanstack/query-core"
+import Hydrate from "@/lib/HydrateClient"
 import axios from "axios"
+import Link from "next/link"
 
 const getProducts = async (accessToken: string | undefined) => {
   const res = await axios.get(
@@ -25,8 +28,16 @@ export default async function AdminProductsPage() {
 
 
   return (
+    <>
+    <div className="flex items-center justify-between">
+      <h3 className="">Products</h3>
+      <Button className="">
+      <Link href='/admin/products/create'>Create</Link>
+    </Button>
+    </div>
     <Hydrate state={dehydratedState}>
       <Products accessKey={user?.accessToken}/>
     </Hydrate>
+    </>
   )
 }
