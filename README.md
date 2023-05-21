@@ -1,34 +1,63 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# HMX-V2
 
-## Getting Started
+An open source e-commerce jogger store built using the new Next.js 13 (app dir), server components and everything new in Next.js 13.
 
-First, run the development server:
+> **Warning**
+> This app is a work in progress. I'm rebuilding my previous ui [HMX](https://github.com/subhamBharadwaz/hmx/tree/master/client)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+
+## About this project
+
+HMX-V2 is a delightful and blazing-fast project built using Next.js 13 and React Server Components. It showcases a modern and streamlined online jogger store user interface (UI). While this project may not be for a real-world application, it serves as a demonstration of the capabilities and performance of Next.js and React Server Components.
+
+In addition to the user interface, HMX-V2 also includes an admin dashboard that enables store administrators to manage products, users, orders and perform various administrative tasks. The admin dashboard provides a comprehensive and user-friendly interface for efficiently managing the jogger store.
+
+This project incorporates the latest features and enhancements introduced in Next.js 13, such as improved performance optimizations, enhanced developer experience, and advanced server-side rendering capabilities. The utilization of React Server Components further enhances the performance by allowing components to be rendered on the server, resulting in faster initial page loads and improved interactivity. With its robust features and high-performance architecture, HMX-V2 is suitable for production use in an online jogger store application
+
+## Features
+
+- New `/app` dir,
+- Routing, Layouts, Nested Layouts and Layout Groups
+- Data Fetching, Caching and Mutation using **React Query**
+- Loading UI
+- Simple State manage with **Zustand**
+- Metadata files
+- Server and Client Components
+- Middleware for protecting pages
+- Authentication using **NextAuth.js**
+- Easy checkout process for hassle-free purchases using **Razorpay**
+- external api calls
+- UI Components built using [shadcn ui](https://ui.shadcn.com/)
+- Styled using **Tailwind CSS**
+- Validations using **React Hook Form** and  **Zod**
+- Responsive layout for seamless browsing across different devices
+- Written in **TypeScript**
+
+
+## Running Locally
+
+1. Install dependencies using pnpm:
+
+```sh
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Copy `.env.example` to `.env.local` and update the variables.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```sh
+cp .env.example .env.local
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+3. Start the development server:
 
-## Learn More
+```sh
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+## License
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Licensed under the [MIT license](https://github.com/subhamBharadwaz/hmx-v2/blob/main/LICENSE.md).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Contributing
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Contributions from the community are always welcome. If you have any ideas or suggestions, feel free to open an issue or submit a pull request. We value your input and appreciate your contribution to make HMX-V2 even better.
