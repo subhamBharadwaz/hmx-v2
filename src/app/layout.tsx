@@ -3,6 +3,7 @@ import localFont from "next/font/local"
 
 import "./globals.css"
 import { Providers } from "@/components/providers"
+import { Toaster } from "@/components/ui/toaster"
 import { cn } from "@/lib/utils"
 
 const fontSans = FontSans({
@@ -26,7 +27,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-
   return (
     <html lang="en">
       <head />
@@ -37,7 +37,10 @@ export default function RootLayout({
           fontHeading.variable
         )}
       >
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+          <Toaster />
+        </Providers>
       </body>
     </html>
   )

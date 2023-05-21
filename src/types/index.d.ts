@@ -202,6 +202,21 @@ export interface IOrder {
   createdAt?: Date;
 }
 
+// Wishlist
+
+export interface IAddress {
+  firstName: string;
+  lastName: string;
+  houseNo: string;
+  streetName: string;
+  landMark: string;
+  postalCode: string;
+  city: string;
+  country?: string;
+  state: string;
+  phoneNumber: string;
+}
+
 
 // Admin
 export interface IAdminProducts {

@@ -9,6 +9,7 @@ import Container from "@/components/container"
 import { Icons } from "@/components/icons"
 import { Button, buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import { CreateBagInput } from "@/lib/validations/bag"
 import { IProduct, IWishlist } from "@/types"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import axios from "axios"
@@ -16,7 +17,7 @@ import axios from "axios"
 import ProductInfoAccordion from "./product-info-accordion"
 import Reviews from "./reviews"
 import SingleProductImageSwiper from "./swiper"
-import { CreateBagInput } from "@/lib/validations/bag"
+import { useStore } from "@/store"
 
 interface SingleProductProps extends React.HTMLAttributes<HTMLDivElement> {
   id: string
@@ -27,8 +28,7 @@ const allSizes = ["S", "M", "L", "XL", "XXL"]
 
 const SingleProduct: FC<SingleProductProps> = ({ id, accessToken }) => {
   const [selectedSize, setSelectedSize] = useState<string | null>(null)
-  const [isAlreadyAddedToWishlist, setIsAlreadyAddedToWishlist] =
-    useState<boolean>(false)
+ const {isAlreadyAddedToWishlist, setIsAlreadyAddedToWishlist} = useStore()
   const [isSizeEmpty, setIsSizeEmpty] = useState<boolean | null>(null)
   const queryClient = useQueryClient()
   const router = useRouter()
@@ -38,7 +38,7 @@ const SingleProduct: FC<SingleProductProps> = ({ id, accessToken }) => {
     queryFn: async () => {
       if (accessToken) {
         const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/wishlist/`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/wishlist`,
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
@@ -51,12 +51,10 @@ const SingleProduct: FC<SingleProductProps> = ({ id, accessToken }) => {
   })
 
   useEffect(() => {
-    console.log(id)
     if (wishlist?.find((product) => product.productId === id)) {
       setIsAlreadyAddedToWishlist(true)
-      console.log({ wishlist })
     }
-  }, [id, isAlreadyAddedToWishlist, wishlist])
+  }, [id, isAlreadyAddedToWishlist, setIsAlreadyAddedToWishlist, wishlist])
 
   const { data, isLoading } = useQuery({
     queryKey: ["product", id],
@@ -86,7 +84,7 @@ const SingleProduct: FC<SingleProductProps> = ({ id, accessToken }) => {
   const addProductToWishlistMutation = useMutation({
     mutationFn: addProductToWishlistHandler,
     onSuccess: (data) => {
-      queryClient.setQueriesData(["wishlist"], data)
+      queryClient.setQueryData(["wishlist"], data)
       setIsAlreadyAddedToWishlist(true)
     },
   })
@@ -107,16 +105,17 @@ const SingleProduct: FC<SingleProductProps> = ({ id, accessToken }) => {
 
   const deleteProductToWishlistMutation = useMutation({
     mutationFn: deleteProductFromWishlistHandler,
-    onSuccess: (data) => {
-      queryClient.setQueriesData(["wishlist"], data)
+    onSuccess: data => {
+      queryClient.setQueryData(['wishlist'],data)
       setIsAlreadyAddedToWishlist(false)
-    },
+    }
   })
 
   const addProductToBagHandler = async (data: CreateBagInput) => {
     if (accessToken) {
       const res = await axios.put(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/bag`,data,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/bag`,
+        data,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -131,13 +130,11 @@ const SingleProduct: FC<SingleProductProps> = ({ id, accessToken }) => {
     mutationFn: addProductToBagHandler,
     onSuccess: (data) => {
       queryClient.setQueriesData(["bag"], data)
-      setIsAlreadyAddedToWishlist(true)
     },
   })
   const handleSizeSelection = (value: string) => {
     setSelectedSize(value)
     setIsSizeEmpty(false)
-    console.log(value)
   }
 
   const {
@@ -172,7 +169,7 @@ const SingleProduct: FC<SingleProductProps> = ({ id, accessToken }) => {
               width={400}
               height={500}
               className="border border-slate-100 object-cover opacity-0 shadow-lg shadow-slate-100/50 transition-opacity duration-300 dark:border-slate-800 dark:shadow-none xl:h-[40rem] xl:w-[45rem] 2xl:h-[45rem] 2xl:w-[50rem]"
-              onLoadingComplete={(image)=> image.classList.remove('opacity-0')}
+              onLoadingComplete={(image) => image.classList.remove("opacity-0")}
             />
           ))}
         </div>
@@ -250,11 +247,17 @@ const SingleProduct: FC<SingleProductProps> = ({ id, accessToken }) => {
           <Button
             size="lg"
             className="w-full"
-            onClick={()=>  accessToken
-              ? isSizeEmpty || selectedSize === null
-                ? setIsSizeEmpty(true)
-                : addProductToBagMutation.mutate({productId: id, size: selectedSize, quantity: 1})
-              : router.push("/login")}
+            onClick={() =>
+              accessToken
+                ? isSizeEmpty || selectedSize === null
+                  ? setIsSizeEmpty(true)
+                  : addProductToBagMutation.mutate({
+                      productId: id,
+                      size: selectedSize,
+                      quantity: 1,
+                    })
+                : router.push("/login")
+            }
           >
             Add to Bag
           </Button>

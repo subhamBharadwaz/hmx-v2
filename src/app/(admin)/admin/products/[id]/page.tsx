@@ -25,7 +25,7 @@ export default async function ProductPage ({params}: {params:{ id: string}}){
    <div className="">
        <Hydrate state={dehydratedState}>
          <div>
-            {/* <SingleProduct id={params.id} accessToken={user?.accessToken}/> */}
+            {/* <P id={params.id} accessToken={user?.accessToken}/> */}
          </div>
        </Hydrate>
    </div>

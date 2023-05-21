@@ -56,7 +56,6 @@ export const columns: ColumnDef<IOrder>[] = [
     },
   },
   {
-    accessorKey: "shippingInfo",
     header: 'Destination',
     cell: ({ row }) => {
       const shippingInfo: ShippingInfoType = row.getValue("shippingInfo")
