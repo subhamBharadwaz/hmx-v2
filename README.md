@@ -26,11 +26,12 @@ This project incorporates the latest features and enhancements introduced in Nex
 - Middleware for protecting pages
 - Authentication using **NextAuth.js**
 - Easy checkout process for hassle-free purchases using **Razorpay**
-- external api calls
+- External api calls
 - UI Components built using [shadcn ui](https://ui.shadcn.com/)
 - Styled using **Tailwind CSS**
 - Validations using **React Hook Form** and  **Zod**
 - Responsive layout for seamless browsing across different devices
+- Admin dashboard 
 - Written in **TypeScript**
 
 
