@@ -212,7 +212,7 @@ export interface IAddress {
   landMark: string;
   postalCode: string;
   city: string;
-  country?: string;
+  country: string;
   state: string;
   phoneNumber: string;
 }

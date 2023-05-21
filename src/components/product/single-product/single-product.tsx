@@ -8,8 +8,10 @@ import Alert from "@/components/alert"
 import Container from "@/components/container"
 import { Icons } from "@/components/icons"
 import { Button, buttonVariants } from "@/components/ui/button"
+import { toast } from "@/components/ui/use-toast"
 import { cn } from "@/lib/utils"
 import { CreateBagInput } from "@/lib/validations/bag"
+import { useStore } from "@/store"
 import { IProduct, IWishlist } from "@/types"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import axios from "axios"
@@ -17,7 +19,6 @@ import axios from "axios"
 import ProductInfoAccordion from "./product-info-accordion"
 import Reviews from "./reviews"
 import SingleProductImageSwiper from "./swiper"
-import { useStore } from "@/store"
 
 interface SingleProductProps extends React.HTMLAttributes<HTMLDivElement> {
   id: string
@@ -28,7 +29,7 @@ const allSizes = ["S", "M", "L", "XL", "XXL"]
 
 const SingleProduct: FC<SingleProductProps> = ({ id, accessToken }) => {
   const [selectedSize, setSelectedSize] = useState<string | null>(null)
- const {isAlreadyAddedToWishlist, setIsAlreadyAddedToWishlist} = useStore()
+  const { isAlreadyAddedToWishlist, setIsAlreadyAddedToWishlist } = useStore()
   const [isSizeEmpty, setIsSizeEmpty] = useState<boolean | null>(null)
   const queryClient = useQueryClient()
   const router = useRouter()
@@ -105,10 +106,10 @@ const SingleProduct: FC<SingleProductProps> = ({ id, accessToken }) => {
 
   const deleteProductToWishlistMutation = useMutation({
     mutationFn: deleteProductFromWishlistHandler,
-    onSuccess: data => {
-      queryClient.setQueryData(['wishlist'],data)
+    onSuccess: (data) => {
+      queryClient.setQueryData(["wishlist"], data)
       setIsAlreadyAddedToWishlist(false)
-    }
+    },
   })
 
   const addProductToBagHandler = async (data: CreateBagInput) => {
@@ -130,6 +131,9 @@ const SingleProduct: FC<SingleProductProps> = ({ id, accessToken }) => {
     mutationFn: addProductToBagHandler,
     onSuccess: (data) => {
       queryClient.setQueriesData(["bag"], data)
+      toast({
+        description: "Successfully added to bag!",
+      })
     },
   })
   const handleSizeSelection = (value: string) => {

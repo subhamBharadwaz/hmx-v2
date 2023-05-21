@@ -55,9 +55,9 @@ export const Bag: FC<BagProps> = ({ accessToken }) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <button onClick={bagTriggerHandler}>
+        <Button onClick={bagTriggerHandler} variant='link' size='sm'>
           <Icons.bag />
-        </button>
+        </Button>
       </SheetTrigger>
       {session?.user && (
         <SheetContent
@@ -69,9 +69,8 @@ export const Bag: FC<BagProps> = ({ accessToken }) => {
             <SheetTitle>Bag</SheetTitle>
           </SheetHeader>
 
-          {isLoading ? (
-            <p>loading...</p>
-          ) : (
+          {bag ? (
+            
             bag?.products?.map((product) => (
               <BagCard
                 key={product?.productId}
@@ -79,19 +78,29 @@ export const Bag: FC<BagProps> = ({ accessToken }) => {
                 accessToken={accessToken}
               />
             ))
+          ) : (
+            <div className="flex h-[20rem] w-full flex-col items-center justify-center gap-y-10 ">
+            <p className="text-xl text-slate-500 md:text-2xl">Your bag is empty!</p>
+            <p className="text-xl text-slate-400 md:text-2xl">Explore more and shortlist some items</p>
+            <Link href='/products' className={cn(buttonVariants({size: 'lg'}), 'mx-auto')}>continue shopping</Link>
+          </div>
           )}
 
           <SheetFooter className="my-10 align-bottom">
             <div className="w-full space-y-5">
-              <div className="flex w-full justify-between border-b border-foreground pb-1">
-                <p className="font-semibold text-foreground">Subtotal</p>
-                <p className="font-semibold text-foreground">
-                  Rs. {bag?.totalPrice}
-                </p>
-              </div>
-              <Link href='/checkout' className={cn(buttonVariants({size:'lg'}), 'w-full')}>
-                Checkout
-              </Link>
+             {bag && (
+              <>
+               <div className="flex w-full justify-between border-b border-foreground pb-1">
+               <p className="font-semibold text-foreground">Subtotal</p>
+               <p className="font-semibold text-foreground">
+                 Rs. {bag?.totalPrice}
+               </p>
+             </div>
+             <Link href='/checkout' className={cn(buttonVariants({size:'lg'}), 'w-full')}>
+               Checkout
+             </Link>
+             </>
+             )}
               <div className="w-full space-y-10 rounded-md bg-orange-50 p-5">
                 <div className="flex items-center justify-between gap-x-5">
                   <p className="font-serif text-lg text-slate-900">VOGUE</p>

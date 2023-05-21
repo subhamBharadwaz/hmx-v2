@@ -36,7 +36,10 @@ export function MainNav({ items, children, accessToken }: MainNavProps) {
         </span>
       </Link>
       <HoverNavigationMenu />
-      <div className="hidden gap-6 md:flex">
+      <div className="hidden gap-3 md:flex">
+        <Link href={accessToken ? '/account' : '/login'} className={cn(buttonVariants({variant: "link", size: 'sm'}))}>
+        <Icons.user/>
+        </Link>
         <WishList accessToken={accessToken} />
         <Bag accessToken={accessToken} />
         {!session?.user.user ? (

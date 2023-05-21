@@ -19,7 +19,7 @@ import { useSession } from "next-auth/react"
 import WishListCard from "./wishlist-card"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
-import { buttonVariants } from "./ui/button"
+import { Button, buttonVariants } from "./ui/button"
 
 interface WishListProps {
   accessToken: string | undefined
@@ -55,9 +55,9 @@ export const WishList: FC<WishListProps> = ({ accessToken }) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <button onClick={wishlistTriggerHandler}>
+        <Button onClick={wishlistTriggerHandler} variant='link' size='sm'>
           <Icons.favorite />
-        </button>
+        </Button>
       </SheetTrigger>
       {session?.user && (
         <SheetContent

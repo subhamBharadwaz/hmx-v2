@@ -1,4 +1,4 @@
-import { dehydrate } from "@tanstack/react-query"
+import { dehydrate } from "@tanstack/query-core"
 import getQueryClient from "@/lib/getQueryClient"
 import Hydrate from "@/lib/HydrateClient"
 import axios from 'axios'

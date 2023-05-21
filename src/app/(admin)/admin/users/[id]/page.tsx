@@ -2,7 +2,7 @@ import UserDetail from "@/components/admin/users/user-details"
 import Hydrate from "@/lib/HydrateClient"
 import getQueryClient from "@/lib/getQueryClient"
 import { getCurrentUser } from "@/lib/session"
-import { dehydrate } from "@tanstack/react-query"
+import { dehydrate } from "@tanstack/query-core"
 import axios from "axios"
 
 const getUser = async (id: string, accessToken: string | undefined) => {

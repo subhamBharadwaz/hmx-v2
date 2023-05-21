@@ -1,5 +1,6 @@
 import Container from "@/components/container"
 import { MainNav } from "@/components/main-nav"
+import { UserAccountNav } from "@/components/user-account-nav"
 import { eCommerceConfig } from "@/config/ecommerce"
 import { getCurrentUser } from "@/lib/session"
 
