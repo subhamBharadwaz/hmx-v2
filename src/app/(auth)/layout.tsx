@@ -18,7 +18,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
         </div>
         </Container>
       </header>
-      <main>{children}</main>
+      <main className="pt-24">{children}</main>
     </div>
   )
 }

@@ -1,6 +1,6 @@
 "use client"
 
-import { FC, useState } from "react"
+import { FC, useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import {
@@ -20,62 +20,40 @@ import {
   XAxis,
   YAxis,
 } from "recharts"
+import { useQuery } from "@tanstack/react-query"
+import axios from "axios"
+import { ISales } from "@/types"
 
-const data = [
-  {
-    name: "Jan",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Feb",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Mar",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Apr",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "May",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Jun",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Jul",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Aug",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Sep",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Oct",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Nov",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Dec",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-]
 
-interface TotalSalesChartProps {}
 
-const TotalSalesChart: FC<TotalSalesChartProps> = ({}) => {
+interface TotalSalesChartProps {
+  accessToken: string | undefined
+}
+
+const TotalSalesChart: FC<TotalSalesChartProps> = ({accessToken}) => {
   const [date, setDate] = useState<Date>()
+  const [selectedYear, setSelectedYear] = useState<number | undefined>(2023)
+
+useEffect(()=>{
+  setSelectedYear(date?.getFullYear())
+},[date])
+
+  const { data: sales } = useQuery<ISales[]>({
+    queryKey: ["admin-total-sales"],
+    queryFn: async () => {
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/sales/${selectedYear}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
+      return await res?.data.salesData
+    },
+  })
+
+
 
   return (
     <div className="w-full grow space-y-5 rounded-lg border border-slate-100 p-5 shadow-lg shadow-slate-100 dark:border-slate-800 dark:shadow-none">
@@ -102,7 +80,7 @@ const TotalSalesChart: FC<TotalSalesChartProps> = ({}) => {
                 size='sm'
                 className={cn(
                   "justify-start text-left font-normal",
-                  !date && "text-muted-foreground"
+                  !sales && "text-muted-foreground"
                 )}
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
@@ -121,7 +99,7 @@ const TotalSalesChart: FC<TotalSalesChartProps> = ({}) => {
         </div>
       </div>
       <ResponsiveContainer className="w-full" height={350}>
-        <ComposedChart width={600} height={300} data={data}>
+        <ComposedChart width={600} height={300} data={sales}>
           <CartesianGrid
             vertical={false}
             horizontal={true}
@@ -152,7 +130,7 @@ const TotalSalesChart: FC<TotalSalesChartProps> = ({}) => {
           />
           <Area
             type="natural"
-            dataKey="total"
+            dataKey="totalRevenue"
             stroke="#67e8f9"
             fillOpacity={1}
             fill="url(#colorUv)"

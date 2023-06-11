@@ -10,7 +10,7 @@ interface AlertProps extends React.HTMLAttributes<HTMLDivElement> {
   title: string
   description: string
   className?: string
-  variant: "default" | "destructive" | "success"
+  variant: "default" | "destructive"
 }
 
 const Alert: React.FC<AlertProps> = ({ className, variant,title,description, ...props }) => {

@@ -12,7 +12,7 @@ const getProducts = async () => {
   const res = await axios.get(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/products`
   )
-  return res.data.products
+  return await res.data
 }
 
 export default async function ProductsPage() {
@@ -22,7 +22,7 @@ export default async function ProductsPage() {
 
   return (
     <section>
-      <h2 className="mx-auto my-5 max-w-[120rem] px-8 text-center text-xl font-semibold md:text-2xl lg:my-10 lg:text-3xl">
+      <h2 className="mx-auto my-5 max-w-[120rem] px-8 pt-24 text-center text-xl font-semibold md:text-2xl lg:my-10 lg:text-3xl">
         Which Jogger is right for you?
       </h2>
 

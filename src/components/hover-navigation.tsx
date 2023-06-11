@@ -18,11 +18,13 @@ import { Category } from "@/types"
 
 import HeroImage1 from "../../public/images/hero1.webp"
 import HeroImage2 from "../../public/images/hero2.webp"
+import { usePathname } from "next/navigation"
 
 interface ICategory {
   title: string
   link: string
 }
+
 
 const categories: ICategory[] = [
   { title: "Twill Jogger", link: "/" },
@@ -40,19 +42,26 @@ const categories: ICategory[] = [
   { title: "Noncuffed Jogger", link: "/" },
 ]
 
-export function HoverNavigationMenu() {
+interface HoverNavigationMenuProps {
+  navTransparent: boolean
+}
+
+export const HoverNavigationMenu : React.FC<HoverNavigationMenuProps>=({navTransparent})=> {
+  const pathname = usePathname()
   return (
-    <NavigationMenu className="hidden md:block">
+    <NavigationMenu className="hidden flex-none md:block">
       <NavigationMenuList>
-      <NavigationMenuItem>
+        <NavigationMenuItem>
           <Link href="/products" legacyBehavior passHref>
-            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+            <NavigationMenuLink className={cn(pathname === '/' && navTransparent ? 'text-white' : 'text-foreground',"bg-transparent", 'h-10 w-max  rounded-md px-4 py-2 text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-50')}>
               Shop All
             </NavigationMenuLink>
           </Link>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <NavigationMenuTrigger>For Him</NavigationMenuTrigger>
+          <NavigationMenuTrigger className={cn(pathname === '/' && navTransparent ? 'text-white' : 'text-foreground',"bg-transparent")}>
+            For Him
+          </NavigationMenuTrigger>
           <NavigationMenuContent className="flex justify-between py-6 pr-6">
             <div>
               <Link
@@ -85,7 +94,7 @@ export function HoverNavigationMenu() {
                   className="object-cover"
                 />
               </div>
-              <div className="relative h-64 w-[200px]">
+              <div className="relative hidden h-64 w-[200px] lg:block">
                 <Image
                   src={HeroImage2}
                   alt="men"
@@ -98,7 +107,7 @@ export function HoverNavigationMenu() {
           </NavigationMenuContent>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <NavigationMenuTrigger>For Her</NavigationMenuTrigger>
+          <NavigationMenuTrigger className={cn(pathname === '/' && navTransparent ? 'text-white' : 'text-foreground',"bg-transparent")}>For Her</NavigationMenuTrigger>
           <NavigationMenuContent className="flex justify-between py-6 pr-6">
             <div>
               <Link
@@ -130,7 +139,7 @@ export function HoverNavigationMenu() {
                   className="object-cover"
                 />
               </div>
-              <div className="relative h-64 w-[200px]">
+              <div className="relative hidden h-64 w-[200px] lg:block">
                 <Image
                   src={HeroImage2}
                   alt="men"

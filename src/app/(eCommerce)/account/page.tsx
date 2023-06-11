@@ -15,7 +15,7 @@ const Address = dynamic(
 export default async function AccountPage(){
     const user = await getCurrentUser()
     return (
-        <section className="container space-y-10">
+        <section className="container space-y-10 pt-24">
             <div className="flex w-full items-center justify-between">
                 <h2 className="text-xl font-bold text-foreground md:text-4xl">Account</h2>
                 <LogoutButton/>
