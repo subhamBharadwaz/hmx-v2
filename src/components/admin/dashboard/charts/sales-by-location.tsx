@@ -17,6 +17,7 @@ import {
   ResponsiveContainer,
   Tooltip
 } from "recharts"
+import { useQuery } from "@tanstack/react-query"
 
 const data = [
   {
@@ -42,6 +43,22 @@ interface TotalSalesChartProps {}
 const TotalSalesChart: FC<TotalSalesChartProps> = ({}) => {
   const [date, setDate] = useState<Date>()
 
+  
+  // const { data: sales } = useQuery<ISales[]>({
+  //   queryKey: ["admin-total-sales"],
+  //   queryFn: async () => {
+  //     const res = await axios.get(
+  //       `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/sales/${selectedYear}`,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${accessToken}`,
+  //         },
+  //       }
+  //     )
+  //     return await res?.data.salesData
+  //   },
+  // })
+  
   return (
     <div className="w-full space-y-5 rounded-lg border border-slate-100 p-5 shadow-lg shadow-slate-100 dark:border-slate-800 dark:shadow-none md:w-5/12">
       <div className="space-y-3">

@@ -37,7 +37,7 @@ const Address: FC<AddressProps> = ({}) => {
   const { toast } = useToast()
 
   return (
-    <div className="space-y-7 lg:max-w-lg" ref={parent}>
+    <div className="space-y-7 lg:max-w-2xl" ref={parent}>
       {address ? (
         <Card>
           <CardHeader>

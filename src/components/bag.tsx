@@ -1,7 +1,7 @@
 "use client"
 
 import { FC } from "react"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { Icons } from "@/components/icons"
 import { Button, buttonVariants } from "@/components/ui/button"
 import {
@@ -23,9 +23,10 @@ import { cn } from "@/lib/utils"
 
 interface BagProps {
   accessToken: string | undefined
+  navTransparent? : boolean
 }
 
-export const Bag: FC<BagProps> = ({ accessToken }) => {
+export const Bag: FC<BagProps> = ({ accessToken, navTransparent }) => {
   const { data: session } = useSession()
   const router = useRouter()
 
@@ -52,11 +53,13 @@ export const Bag: FC<BagProps> = ({ accessToken }) => {
     }
   }
 
+  const pathname = usePathname()
+
   return (
     <Sheet>
       <SheetTrigger asChild>
         <Button onClick={bagTriggerHandler} variant='link' size='sm'>
-          <Icons.bag />
+          <Icons.bag className={cn(pathname === '/' && navTransparent ? 'text-white' : 'text-foreground')} />
         </Button>
       </SheetTrigger>
       {session?.user && (

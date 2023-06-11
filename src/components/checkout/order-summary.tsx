@@ -7,12 +7,14 @@ import autoAnimate from "@formkit/auto-animate"
 import { ChevronDown, ChevronUp, ShoppingBag } from "lucide-react"
 
 import { Button } from "../ui/button"
+import { cn } from "@/lib/utils"
 
-interface OrderSummaryProps {
-  bag: IBag | undefined
+interface OrderSummaryProps{
+  bag: IBag | undefined,
+  className? : string
 }
 
-const OrderSummary: FC<OrderSummaryProps> = ({ bag }) => {
+const OrderSummary: FC<OrderSummaryProps> = ({ bag,className }) => {
   const [show, setShow] = useState<boolean>(false)
   const parent = useRef(null)
 
@@ -23,7 +25,7 @@ const OrderSummary: FC<OrderSummaryProps> = ({ bag }) => {
   const reveal = () => setShow(!show)
 
   return (
-    <div className="w-full lg:min-h-screen lg:w-1/2">
+    <div className={cn("w-full lg:min-h-screen lg:w-1/2", className)}>
       {!bag ? (
         <div className="container space-y-2 lg:space-y-5">
           <p className="text-xl text-foreground md:text-2xl">

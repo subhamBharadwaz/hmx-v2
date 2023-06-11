@@ -127,6 +127,29 @@ export interface IProduct {
   updatedAt: Date
 }
 
+export interface ITopSellingProduct{
+  category: string,
+  name: string,
+  photos: {
+    id: string
+    secure_url: string
+  }[],
+  price:number,
+  productId:string,
+  quantitySold:number
+  totalRevenue:number
+}
+
+export interface IProducts{
+  productCount: number,
+  total:number,
+  limit:number,
+  currentPage:number,
+  pageCount:number,
+  filteredProductCount:number,
+  products: IProduct[]
+}
+
 // Wishlist
 export interface IWishlist {
   productId: string
@@ -219,6 +242,8 @@ export interface IAddress {
 
 
 // Admin
+
+// Products
 export interface IAdminProducts {
   productCount: number
   total: number
@@ -226,4 +251,10 @@ export interface IAdminProducts {
   page: number
   products: IProduct[]
   pageCount: number
+}
+
+// Sales
+export interface ISales {
+    name: string,
+    totalRevenue: number
 }

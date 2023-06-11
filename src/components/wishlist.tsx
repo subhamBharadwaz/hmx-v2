@@ -1,7 +1,7 @@
 "use client"
 
 import { FC } from "react"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { Icons } from "@/components/icons"
 import {
   Sheet,
@@ -23,9 +23,10 @@ import { Button, buttonVariants } from "./ui/button"
 
 interface WishListProps {
   accessToken: string | undefined
+  navTransparent? : boolean
 }
 
-export const WishList: FC<WishListProps> = ({ accessToken }) => {
+export const WishList: FC<WishListProps> = ({ accessToken,navTransparent }) => {
   const { data: session } = useSession()
   const router = useRouter()
 
@@ -52,11 +53,13 @@ export const WishList: FC<WishListProps> = ({ accessToken }) => {
     }
   }
 
+  const pathname = usePathname()
+
   return (
     <Sheet>
       <SheetTrigger asChild>
         <Button onClick={wishlistTriggerHandler} variant='link' size='sm'>
-          <Icons.favorite />
+          <Icons.favorite className={cn(pathname === '/' && navTransparent ? 'text-white' : 'text-foreground')} />
         </Button>
       </SheetTrigger>
       {session?.user && (

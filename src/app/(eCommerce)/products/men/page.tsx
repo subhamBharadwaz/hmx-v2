@@ -22,8 +22,7 @@ export default async function MenProductsPage() {
   const dehydratedState = dehydrate(queryClient)
 
   return (
-    <section>
-      
+    <section className="pt-24">
         <h2 className="mx-auto my-5 max-w-[120rem] px-8 text-center text-xl font-semibold md:text-2xl lg:my-10 lg:text-3xl">Which Jogger is right for you?</h2>
 
        <Container className=" mb-16"  >

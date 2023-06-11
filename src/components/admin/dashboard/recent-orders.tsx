@@ -3,7 +3,6 @@
 import { FC } from "react"
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
-import { buttonVariants } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import {
@@ -17,48 +16,30 @@ import {
 } from "@/components/ui/table"
 import { cn } from "@/lib/utils"
 import { format } from "date-fns"
+import { useQuery } from "@tanstack/react-query"
+import axios from "axios"
+import { IOrder } from "@/types"
 
-const orders = [
-  {
-    date: format(new Date(), "dd.MM.yyyy"),
-    productName: "Rigo Jogger",
-    orderNo: "15696312$dsddsd",
-    price: "$324",
-    orderStatus: "Delivered",
-  },
-  {
-    date: format(new Date(), "dd.MM.yyyy"),
-    productName: "Rigo Jogger",
-    orderNo: "15696312$dsddsd",
-    price: "$324",
-    orderStatus: "Processing",
-  },
-  {
-    date: format(new Date(), "dd.MM.yyyy"),
-    productName: "Rigo Jogger",
-    orderNo: "15696312$dsddsd",
-    price: "$324",
-    orderStatus: "Shipped",
-  },
-  {
-    date: format(new Date(), "dd.MM.yyyy"),
-    productName: "Rigo Jogger",
-    orderNo: "15696312$dsddsd",
-    price: "$324",
-    orderStatus: "Delivered",
-  },
-  {
-    date: format(new Date(), "dd.MM.yyyy"),
-    productName: "Rigo Jogger",
-    orderNo: "15696312$dsddsd",
-    price: "$324",
-    orderStatus: "Processing",
-  },
-]
+interface RecentOrdersProps {
+  accessToken: string | undefined
+}
 
-interface RecentOrdersProps {}
-
-const RecentOrders: FC<RecentOrdersProps> = ({}) => {
+const RecentOrders: FC<RecentOrdersProps> = ({accessToken}) => {
+  const { data: orders } = useQuery<IOrder[]>({
+    queryKey: ["admin-recent-orders"],
+    queryFn: async () => {
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/orders/recent`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
+      return await res?.data.orders
+    },
+  })
+  
   return (
     <Card className="w-full overflow-hidden rounded-lg border border-slate-100 p-5 shadow-lg shadow-slate-100 dark:border-slate-800 dark:shadow-none ">
       <CardHeader className="md:flex-row md:items-center md:justify-between">
@@ -80,14 +61,14 @@ const RecentOrders: FC<RecentOrdersProps> = ({}) => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {orders.map((order) => (
-                <TableRow key={order.orderNo}>
+              {orders && orders?.map((order) => (
+                <TableRow key={order._id}>
                   <TableCell className="text-slate-500 dark:text-slate-400">
-                    {order.date}
+                  {format(new Date(order?.createdAt as Date), 'dd.mm.yyyy')}
                   </TableCell>
-                  <TableCell>{order.productName}</TableCell>
-                  <TableCell>{order.orderNo}</TableCell>
-                  <TableCell>{order.price}</TableCell>
+                  <TableCell className="truncate">{order?.orderItems?.map(item=> item?.name).join(", ")}</TableCell>
+                  <TableCell>{order?._id}</TableCell>
+                  <TableCell>{order?.totalAmount}</TableCell>
                   <TableCell className="text-right">
                     <Badge
                       variant={
@@ -98,7 +79,7 @@ const RecentOrders: FC<RecentOrdersProps> = ({}) => {
                           : "secondary"
                       }
                     >
-                      {order.orderStatus}
+                      {order?.orderStatus}
                     </Badge>
                   </TableCell>
                 </TableRow>

@@ -27,7 +27,7 @@ const Orders: FC<OrdersProps> = ({ accessKey }) => {
     },
   })
 
-  console.log({ data })
+
 
   return (
     <div className="w-full">

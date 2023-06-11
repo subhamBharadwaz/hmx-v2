@@ -1,25 +1,22 @@
-import OverviewCard from "@/components/admin/dashboard/card"
 import SalesByLocationChart from "@/components/admin/dashboard/charts/sales-by-location"
 import TotalSalesChart from "@/components/admin/dashboard/charts/total-sales"
+import Overview from "@/components/admin/dashboard/overview"
 import RecentOrders from "@/components/admin/dashboard/recent-orders"
 import TopSellingProducts from "@/components/admin/dashboard/top-selling-products"
 import Container from "@/components/container"
+import { getCurrentUser } from "@/lib/session"
 
 export default async function AdminPage() {
+  const user = await getCurrentUser()
   return (
     <div className="space-y-10">
-      <div className="justify-between gap-3 space-y-3 md:flex md:space-y-0">
-        <OverviewCard />
-        <OverviewCard />
-        <OverviewCard />
-        <OverviewCard />
-      </div>
+      <Overview accessToken={user?.accessToken} />
       <div className="justify-between space-y-10 md:flex md:gap-x-3 md:space-y-0">
-        <TotalSalesChart />
+        <TotalSalesChart accessToken={user?.accessToken} />
         <SalesByLocationChart />
       </div>
       <div className="justify-between space-y-10 md:flex md:gap-x-3 md:space-y-0">
-        <RecentOrders />
+        <RecentOrders accessToken={user?.accessToken} />
         <TopSellingProducts />
       </div>
     </div>

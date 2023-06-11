@@ -27,7 +27,6 @@ const Products: FC<ProductsProps> = ({ accessKey }) => {
     },
   })
 
-  console.log({ data })
 
   return (
     <div className="w-full">

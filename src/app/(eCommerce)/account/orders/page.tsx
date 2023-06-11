@@ -27,7 +27,7 @@ export default async function OrdersPage(){
     const dehydratedState = dehydrate(queryClient)
 
     return (
-        <section className="container space-y-10">
+        <section className="container space-y-10 pt-24">
             <h2 className="text-xl font-bold text-foreground md:text-4xl">My Orders</h2>
             <Hydrate state={dehydratedState}>
           <Orders accessToken={user?.accessToken}/>
