@@ -44,6 +44,19 @@ export type AdminConfig = {
   sidebarNav: SidebarNavItem[]
 }
 
+export type Option = {
+  label: string
+  value: string
+}
+
+export type FileWithPreview = FileWithPath & {
+  preview: string
+}
+
+export type FileWithPreview = FileWithPath & {
+  preview: string
+}
+
 // User Types
 export interface IUser {
   _id?: string
@@ -127,26 +140,26 @@ export interface IProduct {
   updatedAt: Date
 }
 
-export interface ITopSellingProduct{
-  category: string,
-  name: string,
+export interface ITopSellingProduct {
+  category: string
+  name: string
   photos: {
     id: string
     secure_url: string
-  }[],
-  price:number,
-  productId:string,
-  quantitySold:number
-  totalRevenue:number
+  }[]
+  price: number
+  productId: string
+  quantitySold: number
+  totalRevenue: number
 }
 
-export interface IProducts{
-  productCount: number,
-  total:number,
-  limit:number,
-  currentPage:number,
-  pageCount:number,
-  filteredProductCount:number,
+export interface IProducts {
+  productCount: number
+  total: number
+  limit: number
+  currentPage: number
+  pageCount: number
+  filteredProductCount: number
   products: IProduct[]
 }
 
@@ -193,53 +206,52 @@ export enum OrderStatusType {
 }
 
 export interface IOrder {
-  _id?: string;
+  _id?: string
   shippingInfo: {
-    firstName: string;
-    lastName: string;
-    houseNo: string;
-    streetName: string;
-    landMark: string;
-    postalCode: string;
-    city: string;
-    country: string;
-    state: string;
-    phoneNumber: string;
-  };
+    firstName: string
+    lastName: string
+    houseNo: string
+    streetName: string
+    landMark: string
+    postalCode: string
+    city: string
+    country: string
+    state: string
+    phoneNumber: string
+  }
   orderItems: {
-    _id?: string;
-    name: string;
-    size: string;
-    quantity: number;
-    image: string;
-    price: number;
-    product: string;
-  }[];
+    _id?: string
+    name: string
+    size: string
+    quantity: number
+    image: string
+    price: number
+    product: string
+  }[]
   paymentInfo: {
-    id: string;
-  };
-  taxAmount: number;
-  shippingAmount: number;
-  totalAmount: number;
-  orderStatus?: OrderStatusType;
-  createdAt?: Date;
+    id: string
+  }
+  taxAmount: number
+  shippingAmount: number
+  totalAmount: number
+  orderStatus?: OrderStatusType
+  createdAt?: Date
 }
 
 // Wishlist
 
 export interface IAddress {
-  firstName: string;
-  lastName: string;
-  houseNo: string;
-  streetName: string;
-  landMark: string;
-  postalCode: string;
-  city: string;
-  country: string;
-  state: string;
-  phoneNumber: string;
+  firstName: string
+  lastName: string
+  houseNo: string
+  streetName: string
+  landMark: string
+  postalCode: string
+  city: string
+  country: string
+  state: string
+  phoneNumber: string
 }
-
 
 // Admin
 
@@ -255,6 +267,6 @@ export interface IAdminProducts {
 
 // Sales
 export interface ISales {
-    name: string,
-    totalRevenue: number
+  name: string
+  totalRevenue: number
 }

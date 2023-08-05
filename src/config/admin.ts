@@ -1,17 +1,7 @@
-
 import { AdminConfig } from "@/types"
 
 export const adminConfig: AdminConfig = {
-  mainNav: [
-    {
-      title: "Men",
-      href: "/products/men",
-    },
-    {
-      title: "Women",
-      href: "/products/women",
-    },
-  ],
+  mainNav: [],
   sidebarNav: [
     {
       title: "Dashboard",

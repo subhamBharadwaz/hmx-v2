@@ -19,10 +19,11 @@ export default async function ECommerceLayout({
         <MainNav
           items={eCommerceConfig.mainNav}
           accessToken={user?.accessToken}
+          isCommerce={true}
         />
       </header>
       <main className="relative mb-10 flex-1 ">{children}</main>
-      <Footer/>
+      <Footer />
     </div>
   )
 }

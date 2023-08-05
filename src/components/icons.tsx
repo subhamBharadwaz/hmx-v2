@@ -6,33 +6,36 @@ import {
   ChevronRight,
   Command,
   CreditCard,
+  Crop,
   File,
   FileText,
   Heart,
   HelpCircle,
   Image,
   Laptop,
+  Layout,
+  LayoutDashboard,
+  LineChart,
   Loader2,
   LucideProps,
+  MessageSquare,
   Moon,
   MoreVertical,
   Pizza,
-  LayoutDashboard,
-  LineChart,
   Plus,
+  RefreshCcw,
+  RefreshCw,
   Settings,
+  Shirt,
   ShoppingBag,
+  Sparkles,
   SunMedium,
   Trash,
   Truck,
   Twitter,
+  UploadCloud,
   User,
-  Shirt,
-  Layout,
   X,
-  Sparkles,
-  MessageSquare,
-  RefreshCcw,
   type Icon as LucideIcon,
 } from "lucide-react"
 
@@ -54,7 +57,9 @@ export const Icons = {
   trash: Trash,
   post: FileText,
   page: File,
+  reset: RefreshCw,
   media: Image,
+  crop: Crop,
   order: Truck,
   settings: Settings,
   billing: CreditCard,
@@ -66,14 +71,21 @@ export const Icons = {
   user: User,
   arrowRight: ArrowRight,
   help: HelpCircle,
+  upload: UploadCloud,
   pizza: Pizza,
   sun: SunMedium,
   loader: RefreshCcw,
   moon: Moon,
-  pant: ({...props}: LucideProps)=> (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" {...props}>
-  <path d="M2 5v2h20V5zm0 4v2h20V9zm0 4v2h20v-2zm0 4v2h20v-2zm-2 4H4v-2h16z"/>
-</svg>
+  pant: ({ ...props }: LucideProps) => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <path d="M2 5v2h20V5zm0 4v2h20V9zm0 4v2h20v-2zm0 4v2h20v-2zm-2 4H4v-2h16z" />
+    </svg>
   ),
   solidStar: ({ ...props }: LucideProps) => (
     <svg

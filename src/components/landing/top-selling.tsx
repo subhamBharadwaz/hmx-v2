@@ -29,7 +29,7 @@ const TopSellingProducts: FC<TopSellingProductsProps> = ({}) => {
     },
   })
 
-  console.log({products})
+ 
   return (
     <section className="min-h-[50vh] py-20">
       <Container className="space-y-10">
