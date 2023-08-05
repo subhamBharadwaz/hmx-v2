@@ -1,3 +1,6 @@
+"use client"
+
+import * as React from "react"
 import {
   Accordion,
   AccordionContent,
@@ -15,12 +18,55 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import { ProductCategories, ProductSections, ProductSizes } from "@/constants"
+import {
+  ProductCategories,
+  ProductSections,
+  ProductSizes,
+  categories,
+} from "@/constants"
 import { cn } from "@/lib/utils"
+import { IProducts } from "@/types"
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query"
+import axios from "axios"
 
 import { Icons } from "../icons"
 
 export function FilterProducts() {
+  const queryClient = useQueryClient()
+
+  const [selectedSections, setSelectedSections] = React.useState<string[]>([])
+  const [selectedCategories, setSelectedCategories] = React.useState<string[]>(
+    []
+  )
+
+  const fetchFilteredProducts = async (
+
+    category: string | string[]
+  ) => {
+    const res = await axios.get(
+      `${
+        process.env.NEXT_PUBLIC_API_URL
+      }/api/v1/products?category=${category || "All"}`
+    )
+    return await res?.data
+  }
+
+  const handleApplyFilters = () => {
+    const newData = fetchFilteredProducts(selectedCategories)
+      queryClient.setQueryData(["products"],newData)
+    
+ 
+  }
+
+  const handleCategory = (isChecked: string |boolean, value:string) => {
+
+    setSelectedCategories(
+      isChecked
+        ? [...selectedCategories, value]
+        : selectedCategories.filter((item) => item !== value)
+    )
+  }
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -52,7 +98,11 @@ export function FilterProducts() {
                     >
                       {category}
                     </label>
-                    <Checkbox id={category} />
+                    <Checkbox
+                      id={category}
+                      value={category}
+                      onCheckedChange={(checked)=> handleCategory(checked, category)}
+                    />
                   </div>
                 ))}
               </div>
@@ -100,7 +150,11 @@ export function FilterProducts() {
         </Accordion>
         <SheetFooter className="my-10">
           <div className="w-full space-y-5">
-            <Button type="submit" className="w-full">
+            <Button
+              type="submit"
+              className="w-full"
+              onClick={handleApplyFilters}
+            >
               Apply
             </Button>
             <Button type="submit" className="w-full" variant="outline">
