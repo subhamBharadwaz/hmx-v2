@@ -1,7 +1,8 @@
 "use client"
 
-import { FC, useState, useTransition } from "react"
+import { FC, useEffect, useState, useTransition } from "react"
 import { FileDialog } from "@/components/file-dialog"
+import { Icons } from "@/components/icons"
 import { MultiSelect } from "@/components/multi-select"
 import { Button } from "@/components/ui/button"
 import {
@@ -30,32 +31,62 @@ import {
   CreateProductInput,
   createProductSchema,
 } from "@/lib/validations/product"
-import type { FileWithPreview, IProduct, Option } from "@/types"
+import type { FileWithPreview, IProduct } from "@/types"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import axios from "axios"
 import { useForm } from "react-hook-form"
 
 interface ProductFormProps {
   accessToken: string | undefined
+  productId: string
 }
 
-const ProductForm: FC<ProductFormProps> = ({ accessToken }) => {
-  const form = useForm<CreateProductInput>({
-    resolver: zodResolver(createProductSchema),
+const AdminEditProduct: FC<ProductFormProps> = ({ accessToken, productId }) => {
+  const { data: product, isLoading } = useQuery<IProduct>({
+    queryKey: ["admin-product", productId],
+    queryFn: async () => {
+      if (accessToken) {
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/product/${productId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        )
+        return res.data.product
+      }
+    },
   })
-  const { toast } = useToast()
 
-  const [selectedSizes, setSelectedSizes] = useState<Option[] | null>(null)
+  const { toast } = useToast()
 
   const [files, setFiles] = useState<FileWithPreview[] | null>(null)
   const [isPending, startTransition] = useTransition()
   const queryClient = useQueryClient()
 
-  const adminCreateProductMutation = useMutation({
+  useEffect(() => {
+    if (product?.photos && product?.photos.length > 0) {
+      setFiles(
+        product?.photos.map((image) => {
+          const file = new File([], image?.id, {
+            type: "image",
+          })
+          const fileWithPreview = Object.assign(file, {
+            preview: image?.secure_url,
+          })
+
+          return fileWithPreview
+        })
+      )
+    }
+  }, [product])
+
+  const adminUpdateProductMutation = useMutation({
     mutationFn: async (data) => {
-      const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/product/add`,
+      const res = await axios.put(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/product/${productId}`,
         data,
         {
           headers: {
@@ -75,12 +106,36 @@ const ProductForm: FC<ProductFormProps> = ({ accessToken }) => {
     },
   })
 
+  const form = useForm<CreateProductInput>({
+    resolver: zodResolver(createProductSchema),
+    defaultValues: {
+      name: product?.name,
+      price: String(product?.price),
+      detail: product?.detail,
+      description: product?.description,
+      category: product?.category,
+      gender: product?.gender,
+      brand: product?.brand,
+      stock: String(product?.stock),
+      size: product?.size?.map((s) => {
+        return {
+          value: s,
+          label: s,
+        }
+      }),
+    },
+  })
+
   async function onSubmit(values: CreateProductInput) {
+    console.log({ values })
     try {
       const data = new FormData()
 
       if (values.photos.length < 2) {
-        return
+        toast({
+          description: "Select minimum 2 photos.",
+          variant: "destructive",
+        })
       }
       for (let i = 0; i < values.photos.length; i++) {
         data.append("photos", values.photos[i])
@@ -96,7 +151,7 @@ const ProductForm: FC<ProductFormProps> = ({ accessToken }) => {
         data.append("size", s.value)
       }
       data.append("stock", String(values.stock))
-      adminCreateProductMutation.mutate(data)
+      adminUpdateProductMutation.mutate(data)
     } catch (error: any) {
       toast({
         title: "Something went wrong, please try again later.",
@@ -237,18 +292,15 @@ const ProductForm: FC<ProductFormProps> = ({ accessToken }) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Size</FormLabel>
-              <FormControl>
-                <MultiSelect
-                  placeholder="Select sizes"
-                  options={ProductSizes.map((s) => ({
-                    label: s,
-                    value: s,
-                  }))}
-                  selected={selectedSizes}
-                  setSelected={setSelectedSizes}
-                  {...field}
-                />
-              </FormControl>
+              <MultiSelect
+                createAble={true}
+                isMulti={true}
+                value={field.value}
+                options={ProductSizes}
+                onChange={field.onChange}
+                placeholder="Select Sizes"
+                {...field}
+              />
               <FormMessage />
             </FormItem>
           )}
@@ -309,7 +361,7 @@ const ProductForm: FC<ProductFormProps> = ({ accessToken }) => {
         />
 
         <FormItem className="flex w-full flex-col gap-1.5">
-          <FormLabel>Product Description</FormLabel>
+          <FormLabel>Product Photos</FormLabel>
           <FormControl>
             <FileDialog
               setValue={form.setValue}
@@ -325,11 +377,14 @@ const ProductForm: FC<ProductFormProps> = ({ accessToken }) => {
         </FormItem>
 
         <Button type="submit" size="lg">
-          Create Product
+          {adminUpdateProductMutation.isLoading && (
+            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+          )}
+          Update Product
         </Button>
       </form>
     </Form>
   )
 }
 
-export default ProductForm
+export default AdminEditProduct

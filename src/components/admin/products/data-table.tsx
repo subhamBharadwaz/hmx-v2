@@ -31,8 +31,8 @@ import {
 } from "@tanstack/react-table"
 
 import { DataTablePagination } from "./data-table-pagination"
-import { DataTableViewOptions } from "./data-table-view-options"
 import { DataTableToolbar } from "./data-table-toolbar"
+import { DataTableViewOptions } from "./data-table-view-options"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -70,7 +70,7 @@ export function DataTable<TData, TValue>({
   return (
     <div>
       <div className="flex items-center py-4">
-       <DataTableToolbar table={table}/>
+        <DataTableToolbar table={table} />
         <DataTableViewOptions table={table} />
       </div>
       <div className="rounded-md border">

@@ -1,152 +1,99 @@
 "use client"
 
-import * as React from "react"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Command, CommandGroup, CommandItem } from "@/components/ui/command"
-import type { Option } from "@/types"
-import { Command as CommandPrimitive } from "cmdk"
-import { X } from "lucide-react"
+import clsx from "clsx"
+import Select from "react-select"
+import makeAnimated from "react-select/animated"
+import CreatableSelect from "react-select/creatable"
 
-interface MultiSelectProps {
-  selected: Option[] | null
-  setSelected: React.Dispatch<React.SetStateAction<Option[] | null>>
-  onChange?: (value: Option[] | null) => void
+const controlStyles = {
+  base: "border border-border rounded-lg bg-background hover:cursor-pointer hover:bg-secondary",
+  focus: "border-border ring-ring ring-primary-500",
+  nonFocus: "border-border",
+}
+const placeholderStyles = "text-muted-foreground text-sm ml-1"
+const selectInputStyles = "text-foreground text-sm ml-1"
+const valueContainerStyles = "text-foreground text-sm"
+const singleValueStyles = "ml-1"
+const multiValueStyles =
+  "ml-1 bg-background border border-border rounded items-center py-0.5 pl-2 pr-1 gap-2"
+const multiValueLabelStyles = "leading-6 py-0.5"
+const multiValueRemoveStyles =
+  "border border-gray-200 bg-white hover:bg-background hover:text-foreground text-gray-500 hover:border-foreground rounded-md transition-colors"
+const indicatorsContainerStyles = "p-1 gap-1"
+const clearIndicatorStyles = "text-gray-500 p-1 hover:text-foreground"
+const indicatorSeparatorStyles = "bg-mutated"
+const dropdownIndicatorStyles = "p-1 hover:text-foreground text-gray-500"
+const menuStyles =
+  "mt-2 p-2 border border-border bg-background text-sm rounded-lg"
+const optionsStyle =
+  "bg-background p-2 border-0 text-base hover:bg-secondary hover:cursor-pointer"
+const groupHeadingStyles = "ml-3 mt-2 mb-1 text-gray-500 text-sm bg-background"
+const noOptionsMessageStyles = "text-muted-foreground bg-background"
+
+type SelectComponentProps = {
+  options: any[]
+  value?: any
+  onChange?: (value: any) => void
+  isMulti?: boolean
+  isDisabled?: boolean
+  isLoading?: boolean
+  createAble: boolean
   placeholder?: string
-  options: Option[]
 }
 
-export function MultiSelect({
-  selected,
-  setSelected,
-  onChange,
-  placeholder = "Select options",
+export const MultiSelect = ({
   options,
-}: MultiSelectProps) {
-  const inputRef = React.useRef<HTMLInputElement>(null)
-  const [isOpen, setIsOpen] = React.useState(false)
-  const [query, setQuery] = React.useState("")
-
-  // Register as input field to be used in react-hook-form
-  React.useEffect(() => {
-    if (onChange) onChange(selected?.length ? selected : null)
-  }, [onChange, selected])
-
-  const handleSelect = React.useCallback(
-    (option: Option) => {
-      setSelected((prev) => [...(prev || []), option])
-    },
-    [setSelected]
-  )
-
-  const handleRemove = React.useCallback(
-    (option: Option) => {
-      setSelected((prev) => prev?.filter((item) => item !== option) ?? [])
-    },
-    [setSelected]
-  )
-
-  const handleKeyDown = React.useCallback(
-    (event: React.KeyboardEvent<HTMLDivElement>) => {
-      if (!inputRef.current) return
-
-      if (event.key === "Backspace" || event.key === "Delete") {
-        setSelected((prev) => prev?.slice(0, -1) ?? [])
-      }
-
-      // Blur input on escape
-      if (event.key === "Escape") {
-        inputRef.current.blur()
-      }
-    },
-    [setSelected]
-  )
-
-  // Memoize filtered options to avoid unnecessary re-renders
-  const filteredOptions = React.useMemo(() => {
-    return options.filter((option) => {
-      if (selected?.find((item) => item.value === option.value)) return false
-
-      if (query.length === 0) return true
-
-      return option.label.toLowerCase().includes(query.toLowerCase())
-    })
-  }, [options, query, selected])
-
+  value,
+  onChange,
+  isMulti,
+  isDisabled,
+  isLoading,
+  createAble,
+  placeholder,
+  ...props
+}: SelectComponentProps) => {
+  const animatedComponents = makeAnimated()
+  const Comp = createAble ? CreatableSelect : Select
   return (
-    <Command
-      onKeyDown={handleKeyDown}
-      className="overflow-visible bg-transparent"
-    >
-      <div className="group rounded-md border border-input px-3 py-2 text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
-        <div className="flex flex-wrap gap-1">
-          {selected?.map((option) => {
-            return (
-              <Badge
-                key={option.value}
-                variant="secondary"
-                className="rounded hover:bg-secondary"
-              >
-                {option.label}
-                <Button
-                  aria-label="Remove option"
-                  size="sm"
-                  className="ml-2 h-auto bg-transparent p-0 text-primary hover:bg-transparent hover:text-destructive"
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      e.preventDefault()
-                      e.stopPropagation()
-                      handleRemove(option)
-                    }
-                  }}
-                  onMouseDown={(e) => {
-                    e.preventDefault()
-                    e.stopPropagation()
-                  }}
-                  onClick={() => handleRemove(option)}
-                >
-                  <X className="h-3 w-3" aria-hidden="true" />
-                </Button>
-              </Badge>
-            )
-          })}
-          <CommandPrimitive.Input
-            ref={inputRef}
-            placeholder={placeholder}
-            className="flex-1 bg-transparent px-1 py-0.5 outline-none placeholder:text-muted-foreground"
-            value={query}
-            onValueChange={setQuery}
-            onBlur={() => setIsOpen(false)}
-            onFocus={() => setIsOpen(true)}
-          />
-        </div>
-      </div>
-      <div className="relative z-50 mt-2">
-        {isOpen && filteredOptions.length > 0 ? (
-          <div className="absolute top-0 w-full rounded-md border bg-popover text-popover-foreground shadow-md outline-none animate-in">
-            <CommandGroup className="h-full overflow-auto">
-              {filteredOptions.map((option) => {
-                return (
-                  <CommandItem
-                    key={option.value}
-                    className="px-2 py-1.5 text-sm"
-                    onMouseDown={(e) => {
-                      e.preventDefault()
-                      e.stopPropagation()
-                    }}
-                    onSelect={() => {
-                      handleSelect(option)
-                      setQuery("")
-                    }}
-                  >
-                    {option.label}
-                  </CommandItem>
-                )
-              })}
-            </CommandGroup>
-          </div>
-        ) : null}
-      </div>
-    </Command>
+    <>
+      <Comp
+        unstyled
+        isClearable
+        isSearchable
+        value={value}
+        isDisabled={isDisabled}
+        isMulti={isMulti}
+        isLoading={isLoading}
+        placeholder={placeholder}
+        components={animatedComponents}
+        defaultValue={value}
+        options={options}
+        noOptionsMessage={() => "No options found !!"}
+        onChange={onChange}
+        classNames={{
+          control: ({ isFocused }) =>
+            clsx(
+              isFocused ? controlStyles.focus : controlStyles.nonFocus,
+              controlStyles.base
+            ),
+          placeholder: () => placeholderStyles,
+          input: () => selectInputStyles,
+          option: () => optionsStyle,
+          menu: () => menuStyles,
+          valueContainer: () => valueContainerStyles,
+          singleValue: () => singleValueStyles,
+          multiValue: () => multiValueStyles,
+          multiValueLabel: () => multiValueLabelStyles,
+          multiValueRemove: () => multiValueRemoveStyles,
+          indicatorsContainer: () => indicatorsContainerStyles,
+          clearIndicator: () => clearIndicatorStyles,
+          indicatorSeparator: () => indicatorSeparatorStyles,
+          dropdownIndicator: () => dropdownIndicatorStyles,
+          groupHeading: () => groupHeadingStyles,
+          noOptionsMessage: () => noOptionsMessageStyles,
+        }}
+        {...props}
+      />
+    </>
   )
 }

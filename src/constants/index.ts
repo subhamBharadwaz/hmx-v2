@@ -1,5 +1,12 @@
-import { Icons } from '@/components/icons'
-import { Lock, User,PackageOpen,BaggageClaim,Truck,MailCheck } from  'lucide-react'
+import { Icons } from "@/components/icons"
+import {
+  BaggageClaim,
+  Lock,
+  MailCheck,
+  PackageOpen,
+  Truck,
+  User,
+} from "lucide-react"
 
 export const ProductCarousalData = [
   {
@@ -46,7 +53,15 @@ export const ProductCategories = [
 
 export const ProductSections = ["Men", "Women", "Unisex"]
 
-export const ProductSizes = ["S", "M", "L", "XL", "XXL"]
+export const ProductSizes = [
+  {
+    value: "S",
+    label: "S",
+  },
+  { value: "M", label: "M" },
+  { value: "L", label: "L" },
+  { value: "XL", label: "Xl" },
+]
 
 export const roles = [
   {
@@ -153,5 +168,3 @@ export const productSections = [
     label: "Unisex",
   },
 ]
-
-
