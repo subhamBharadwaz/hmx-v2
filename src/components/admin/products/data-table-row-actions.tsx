@@ -30,7 +30,7 @@ interface DataTableRowActionsProps<TData> {
 }
 
 export function DataTableRowActions<TData>({
-    product,
+  product,
 }: DataTableRowActionsProps<TData>) {
   const [showDeleteDialog, setShowDeleteDialog] = React.useState<boolean>(false)
   const [isDeleteLoading, setIsDeleteLoading] = React.useState<boolean>(false)
@@ -39,25 +39,25 @@ export function DataTableRowActions<TData>({
   const { data: session } = useSession()
   const accessToken = session?.user?.accessToken
 
-//   const adminDeleteUserHandler = async () => {
-//     if (accessToken) {
-//       await axios.delete(
-//         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/user/${user?._id}`,
+  const adminDeleteProductHandler = async () => {
+    if (accessToken) {
+      await axios.delete(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/product/${product?._id}`,
 
-//         {
-//           headers: {
-//             Authorization: `Bearer ${accessToken}`,
-//           },
-//         }
-//       )
-//     }
-//   }
-//   const adminDeleteUserMutation = useMutation({
-//     mutationFn: adminDeleteUserHandler,
-//     onSuccess: () => {
-//       queryClient.invalidateQueries(["admin-users"])
-//     },
-//   })
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
+    }
+  }
+  const adminDeleteProductMutation = useMutation({
+    mutationFn: adminDeleteProductHandler,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["admin-products"])
+    },
+  })
 
   return (
     <>
@@ -68,7 +68,10 @@ export function DataTableRowActions<TData>({
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem>
-            <Link href={`/admin/products/${product?._id}`} className="flex w-full">
+            <Link
+              href={`/admin/products/${product?._id}`}
+              className="flex w-full"
+            >
               View/Edit Order
             </Link>
           </DropdownMenuItem>
@@ -98,7 +101,7 @@ export function DataTableRowActions<TData>({
                 event.preventDefault()
                 setIsDeleteLoading(true)
 
-                // adminDeleteUserMutation.mutate()
+                adminDeleteProductMutation.mutate()
 
                 setIsDeleteLoading(false)
                 setShowDeleteDialog(false)

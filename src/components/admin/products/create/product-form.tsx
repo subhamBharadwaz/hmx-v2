@@ -1,6 +1,8 @@
 "use client"
 
-import { FC } from "react"
+import { FC, useState, useTransition } from "react"
+import { FileDialog } from "@/components/file-dialog"
+import { MultiSelect } from "@/components/multi-select"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -22,34 +24,87 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/components/ui/use-toast"
+import { ProductSections, ProductSizes } from "@/constants"
 import {
   CreateProductInput,
   createProductSchema,
 } from "@/lib/validations/product"
+import type { FileWithPreview, IProduct, Option } from "@/types"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import axios from "axios"
 import { useForm } from "react-hook-form"
-import RSelect from "react-select"
 
-const sections = [
-  { value: "Men", label: "Men" },
-  { value: "Women", label: "Women" },
-  { value: "Unisex", label: "Unisex" },
-]
+interface ProductFormProps {
+  accessToken: string | undefined
+}
 
-interface ProductFormProps {}
-
-const ProductForm: FC<ProductFormProps> = ({}) => {
+const ProductForm: FC<ProductFormProps> = ({ accessToken }) => {
   const form = useForm<CreateProductInput>({
     resolver: zodResolver(createProductSchema),
   })
   const { toast } = useToast()
 
+  const [selectedSizes, setSelectedSizes] = useState<Option[] | null>(null)
+
+  const [files, setFiles] = useState<FileWithPreview[] | null>(null)
+  const [isPending, startTransition] = useTransition()
+  const queryClient = useQueryClient()
+
+  const adminCreateProductMutation = useMutation({
+    mutationFn: async (data) => {
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/product/add`,
+        data,
+        {
+          headers: {
+            "content-type": "multipart/form-data",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
+      return res?.data
+    },
+    onSuccess: (data) => {
+      queryClient.setQueriesData<IProduct>(["admin-products"], data)
+      toast({
+        description: "Product created successfully.",
+        variant: "success",
+      })
+    },
+  })
+
   async function onSubmit(values: CreateProductInput) {
-    toast({
-      description: "Address updated successfully.",
-    })
+    try {
+      const data = new FormData()
+
+      if (values.photos.length < 2) {
+        return
+      }
+      for (let i = 0; i < values.photos.length; i++) {
+        data.append("photos", values.photos[i])
+      }
+      data.append("name", values.name)
+      data.append("brand", values.brand)
+      data.append("price", values.price)
+      data.append("category", values.category)
+      data.append("detail", values.detail)
+      data.append("description", values.description)
+      data.append("gender", values.gender)
+      for (const s of values.size) {
+        data.append("size", s.value)
+      }
+      data.append("stock", String(values.stock))
+      adminCreateProductMutation.mutate(data)
+    } catch (error: any) {
+      toast({
+        title: "Something went wrong, please try again later.",
+        description: error.message,
+        variant: "destructive",
+      })
+      console.error(error)
+    }
   }
 
   return (
@@ -67,6 +122,25 @@ const ProductForm: FC<ProductFormProps> = ({}) => {
               <FormDescription>
                 Do not exceed 30 characters when entering the product name.
               </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="price"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Price</FormLabel>
+              <FormControl>
+                <Input
+                  type="number"
+                  placeholder="Enter the product price..."
+                  {...field}
+                />
+              </FormControl>
+
               <FormMessage />
             </FormItem>
           )}
@@ -159,10 +233,45 @@ const ProductForm: FC<ProductFormProps> = ({}) => {
           name="size"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Brand</FormLabel>
+              <FormLabel>Size</FormLabel>
               <FormControl>
-                <Input placeholder="Enter the brand name." {...field} />
+                <MultiSelect
+                  placeholder="Select sizes"
+                  options={ProductSizes.map((s) => ({
+                    label: s,
+                    value: s,
+                  }))}
+                  selected={selectedSizes}
+                  setSelected={setSelectedSizes}
+                  {...field}
+                />
               </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="gender"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Section</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a section" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Categories</SelectLabel>
+                    <SelectItem value="Men">Men</SelectItem>
+                    <SelectItem value="Women">Women</SelectItem>
+                    <SelectItem value="Unisex">Unisex</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
               <FormMessage />
             </FormItem>
           )}
@@ -173,7 +282,7 @@ const ProductForm: FC<ProductFormProps> = ({}) => {
           name="detail"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Street Name</FormLabel>
+              <FormLabel>Product Detail</FormLabel>
               <FormControl>
                 <Input placeholder="Enter the street name" {...field} />
               </FormControl>
@@ -187,14 +296,30 @@ const ProductForm: FC<ProductFormProps> = ({}) => {
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Land Mark</FormLabel>
+              <FormLabel>Product Description</FormLabel>
               <FormControl>
-                <Input placeholder="Enter land mark" {...field} />
+                <Input placeholder="Enter Product Description" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
+
+        <FormItem className="flex w-full flex-col gap-1.5">
+          <FormLabel>Product Description</FormLabel>
+          <FormControl>
+            <FileDialog
+              setValue={form.setValue}
+              name="photos"
+              maxFiles={4}
+              maxSize={1024 * 1024 * 4}
+              files={files}
+              setFiles={setFiles}
+              disabled={isPending}
+            />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
 
         <Button type="submit" size="lg">
           Create Product
