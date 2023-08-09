@@ -63,7 +63,7 @@ export function MainNav({
           "w-full transition-colors duration-150 ease-in-out"
         )}
       >
-        <div className="container flex w-full justify-between gap-6 py-6 md:gap-10">
+        <Container className="flex w-full justify-between gap-6 py-6 md:gap-10">
           {isCommerce && (
             <HoverNavigationMenu navTransparent={navTransparent} />
           )}
@@ -138,7 +138,7 @@ export function MainNav({
             </>
           )}
           <MobileNav items={items}>{children}</MobileNav>
-        </div>
+        </Container>
       </nav>
     </>
   )

@@ -1,24 +1,14 @@
+"use client"
+
+import { useState } from "react"
 import Container from "@/components/container"
 import { FilterProducts } from "@/components/product/filter"
 import Products from "@/components/product/products"
 import SwiperCards from "@/components/product/swiper"
 import { ProductCarousalData } from "@/constants"
-import Hydrate from "@/lib/HydrateClient"
-import getQueryClient from "@/lib/getQueryClient"
-import { dehydrate } from "@tanstack/query-core"
-import axios from "axios"
 
-const getProducts = async () => {
-  const res = await axios.get(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/products`
-  )
-  return await res.data
-}
-
-export default async function ProductsPage() {
-  const queryClient = getQueryClient()
-  await queryClient.prefetchQuery(["products"], getProducts)
-  const dehydratedState = dehydrate(queryClient)
+export default function ProductsPage() {
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([])
 
   return (
     <section>
@@ -44,12 +34,7 @@ export default async function ProductsPage() {
         </div>
       </div>
       <Container>
-        <div className="mb-5">
-          <FilterProducts />
-        </div>
-        <Hydrate state={dehydratedState}>
-          <Products />
-        </Hydrate>
+        <Products />
       </Container>
     </section>
   )
