@@ -25,29 +25,21 @@ interface FilterProductsProps {
   onCategoryChange: (checked: boolean, value: string) => void
   onSectionChange: (checked: boolean, value: string) => void
   onSizeChange: (checked: boolean, value: string) => void
-  onApplyFilters: (
-    selectedCategories: string[],
-    selectedSections: string[],
-    selectedSizes: string[]
-  ) => void
+  handleClearFilters: () => void
   selectedCategories: string[]
   selectedSections: string[]
   selectedSizes: string[]
 }
 
 export const FilterProducts: React.FC<FilterProductsProps> = ({
-  onApplyFilters,
   onCategoryChange,
   onSectionChange,
   onSizeChange,
   selectedCategories,
   selectedSections,
   selectedSizes,
+  handleClearFilters,
 }) => {
-  const handleApplyFilters = () => {
-    onApplyFilters(selectedCategories, selectedSections, selectedSizes)
-  }
-
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -82,6 +74,7 @@ export const FilterProducts: React.FC<FilterProductsProps> = ({
                     <Checkbox
                       id={category}
                       value={category}
+                      checked={selectedCategories.includes(category)}
                       onCheckedChange={(checked) =>
                         onCategoryChange(checked as boolean, category)
                       }
@@ -109,6 +102,7 @@ export const FilterProducts: React.FC<FilterProductsProps> = ({
                     <Checkbox
                       id={section}
                       value={section}
+                      checked={selectedSections.includes(section)}
                       onCheckedChange={(checked) =>
                         onSectionChange(checked as boolean, section)
                       }
@@ -136,6 +130,7 @@ export const FilterProducts: React.FC<FilterProductsProps> = ({
                     <Checkbox
                       id={size.value}
                       value={size.value}
+                      checked={selectedSizes.includes(size.value)}
                       onCheckedChange={(checked) =>
                         onSizeChange(checked as boolean, size.value)
                       }
@@ -151,11 +146,9 @@ export const FilterProducts: React.FC<FilterProductsProps> = ({
             <Button
               type="submit"
               className="w-full"
-              onClick={handleApplyFilters}
+              variant="outline"
+              onClick={handleClearFilters}
             >
-              Apply
-            </Button>
-            <Button type="submit" className="w-full" variant="outline">
               Remove all
             </Button>
           </div>

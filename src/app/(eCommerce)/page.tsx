@@ -4,13 +4,13 @@ import HeroSection from "@/components/landing/hero-section"
 import ServiceHighlights from "@/components/landing/service-highlights"
 import TopSellingProducts from "@/components/landing/top-selling"
 import VisionariesSwiper from "@/components/landing/visionaries-swiper"
+import VisionariesSection from "@/components/landing/visonaries-section"
 import SwiperCards from "@/components/product/swiper"
 import { ProductCarousalData } from "@/constants"
 import Hydrate from "@/lib/HydrateClient"
 import getQueryClient from "@/lib/getQueryClient"
 import { dehydrate } from "@tanstack/query-core"
 import axios from "axios"
-import VisionariesSection from "@/components/landing/visonaries-section"
 
 const getTopSellingProducts = async () => {
   const res = await axios.get(
@@ -42,7 +42,7 @@ export default async function Home() {
           <SwiperCards data={ProductCarousalData} />
         </Container>
       </section>
-     <VisionariesSection/>
+      <VisionariesSection />
     </>
   )
 }

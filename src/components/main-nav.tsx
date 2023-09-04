@@ -6,6 +6,7 @@ import { usePathname, useSelectedLayoutSegment } from "next/navigation"
 import { Icons } from "@/components/icons"
 import { MobileNav } from "@/components/mobile-nav"
 import { siteConfig } from "@/config/site"
+import { useMediaQuery } from "@/hooks/use-mediaQuery"
 import { cn } from "@/lib/utils"
 import { MainNavItem, SidebarNavItem } from "@/types"
 import { signOut, useSession } from "next-auth/react"
@@ -35,6 +36,8 @@ export function MainNav({
 
   const pathname = usePathname()
 
+  const matches = useMediaQuery("(min-width: 768px)")
+
   React.useEffect(() => {
     const handleScroll = () => {
       const currentScroll = window.pageYOffset
@@ -60,6 +63,7 @@ export function MainNav({
       <nav
         className={cn(
           navTransparent ? "bg-transparent" : "bg-background",
+
           "w-full transition-colors duration-150 ease-in-out"
         )}
       >
@@ -130,14 +134,17 @@ export function MainNav({
                     Login
                   </Link>
                 ) : (
-                  <Button size="sm" variant="outline" onClick={() => signOut()}>
+                  <Button
+                    size="sm"
+                    className="text-white"
+                    onClick={() => signOut()}
+                  >
                     Logout
                   </Button>
                 )}
               </div>
             </>
           )}
-          <MobileNav items={items}>{children}</MobileNav>
         </Container>
       </nav>
     </>

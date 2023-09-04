@@ -1,6 +1,7 @@
 "use client"
 
 import { FC, useEffect, useState, useTransition } from "react"
+import dynamic from "next/dynamic"
 import { FileDialog } from "@/components/file-dialog"
 import { Icons } from "@/components/icons"
 import { MultiSelect } from "@/components/multi-select"
@@ -37,6 +38,11 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import axios from "axios"
 import { useForm } from "react-hook-form"
 
+import "react-quill/dist/quill.snow.css"
+
+const ReactQuill = dynamic(() => import("react-quill"), {
+  ssr: false, // Set ssr to false to make sure this component is only rendered on the client-side
+})
 interface ProductFormProps {
   accessToken: string | undefined
   productId: string
@@ -335,11 +341,27 @@ const AdminEditProduct: FC<ProductFormProps> = ({ accessToken, productId }) => {
         <FormField
           control={form.control}
           name="detail"
-          render={({ field }) => (
+          render={({ field: { onChange, onBlur, value } }) => (
             <FormItem>
               <FormLabel>Product Detail</FormLabel>
               <FormControl>
-                <Input placeholder="Enter the street name" {...field} />
+                <ReactQuill
+                  value={value}
+                  onBlur={onBlur}
+                  onChange={(newValue) => {
+                    onChange(newValue)
+                  }}
+                  modules={{
+                    toolbar: [
+                      [{ header: "1" }, { header: "2" }, { font: [] }],
+                      [{ size: [] }],
+                      ["bold", "italic", "underline", "strike", "blockquote"],
+                      [{ list: "ordered" }, { list: "bullet" }],
+                      ["link", "image", "video"],
+                      ["clean"],
+                    ],
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -349,11 +371,27 @@ const AdminEditProduct: FC<ProductFormProps> = ({ accessToken, productId }) => {
         <FormField
           control={form.control}
           name="description"
-          render={({ field }) => (
+          render={({ field: { onChange, onBlur, value } }) => (
             <FormItem>
               <FormLabel>Product Description</FormLabel>
               <FormControl>
-                <Input placeholder="Enter Product Description" {...field} />
+                <ReactQuill
+                  value={value}
+                  onBlur={onBlur}
+                  onChange={(newValue) => {
+                    onChange(newValue)
+                  }}
+                  modules={{
+                    toolbar: [
+                      [{ header: "1" }, { header: "2" }, { font: [] }],
+                      [{ size: [] }],
+                      ["bold", "italic", "underline", "strike", "blockquote"],
+                      [{ list: "ordered" }, { list: "bullet" }],
+                      ["link", "image", "video"],
+                      ["clean"],
+                    ],
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

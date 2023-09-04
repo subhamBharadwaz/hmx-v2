@@ -2,6 +2,7 @@
 
 import { FC, useEffect, useState } from "react"
 import { Skeleton } from "@/components/ui/skeleton"
+import getQueryClient from "@/lib/getQueryClient"
 import { IProducts } from "@/types"
 import { useInfiniteQuery } from "@tanstack/react-query"
 import axios from "axios"
@@ -15,6 +16,8 @@ const Products: FC = () => {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
   const [selectedSections, setSelectedSections] = useState<string[]>([])
   const [selectedSizes, setSelectedSizes] = useState<string[]>([])
+
+  const queryClient = getQueryClient()
 
   const fetchProducts = async (page: number) => {
     const params = new URLSearchParams()
@@ -30,7 +33,12 @@ const Products: FC = () => {
 
   const { data, fetchNextPage, isFetchingNextPage } =
     useInfiniteQuery<IProducts>({
-      queryKey: ["products"],
+      queryKey: [
+        "products",
+        selectedCategories,
+        selectedSections,
+        selectedSizes,
+      ],
       queryFn: async ({ pageParam = 1 }) => fetchProducts(pageParam),
       getNextPageParam: (lastPage) => {
         const { currentPage, pageCount } = lastPage
@@ -39,69 +47,70 @@ const Products: FC = () => {
         }
         return undefined
       },
+      enabled:
+        selectedCategories.length > 0 ||
+        selectedSections.length > 0 ||
+        selectedSizes.length > 0,
     })
 
   useEffect(() => {
     if (inView) fetchNextPage()
   }, [inView])
 
+  useEffect(() => {
+    if (
+      selectedCategories.length === 0 &&
+      selectedSections.length === 0 &&
+      selectedSizes.length === 0
+    ) {
+      queryClient.refetchQueries([
+        "products",
+        selectedCategories,
+        selectedSections,
+        selectedSizes,
+      ])
+    }
+  }, [queryClient, selectedCategories, selectedSections, selectedSizes])
+
   const products = data?.pages?.flatMap((page) => page?.products)
 
   const handleCategory = (checked: boolean, value: string) => {
-    if (checked) {
-      setSelectedCategories((prevSelectedCategories) => [
-        ...prevSelectedCategories,
-        value,
-      ])
-    } else {
-      setSelectedCategories((prevSelectedCategories) =>
-        prevSelectedCategories.filter((category) => category !== value)
-      )
-    }
+    setSelectedCategories(
+      checked
+        ? [...selectedCategories, value]
+        : selectedCategories.filter((item) => item !== value)
+    )
   }
 
   const handleSections = (checked: boolean, value: string) => {
-    if (checked) {
-      setSelectedSections((prevSelectedSections) => [
-        ...prevSelectedSections,
-        value,
-      ])
-    } else {
-      setSelectedSections((prevSelectedSections) =>
-        prevSelectedSections.filter((section) => section !== value)
-      )
-    }
+    setSelectedSections(
+      checked
+        ? [...selectedSections, value]
+        : selectedSections.filter((item) => item !== value)
+    )
   }
 
   const handleSizes = (checked: boolean, value: string) => {
-    if (checked) {
-      setSelectedSizes((prevSelectedSizes) => [...prevSelectedSizes, value])
-    } else {
-      setSelectedSizes((prevSelectedSizes) =>
-        prevSelectedSizes.filter((size) => size !== value)
-      )
-    }
+    setSelectedSizes(
+      checked
+        ? [...selectedSizes, value]
+        : selectedSizes.filter((item) => item !== value)
+    )
   }
 
-  const handleApplyFilters = (
-    selectedCategories: string[],
-    selectedSections: string[],
-    selectedSizes: string[]
-  ) => {
-    setSelectedCategories(selectedCategories)
-    setSelectedSections(selectedSections)
-    setSelectedSizes(selectedSizes)
-    fetchNextPage({ pageParam: 1 })
+  const handleClearFilters = () => {
+    setSelectedCategories([]), setSelectedSections([]), setSelectedSizes([])
+    queryClient.refetchQueries(["products"])
   }
 
   return (
     <>
       <div className="mb-5">
         <FilterProducts
-          onApplyFilters={handleApplyFilters}
           onCategoryChange={handleCategory}
           onSectionChange={handleSections}
           onSizeChange={handleSizes}
+          handleClearFilters={handleClearFilters}
           selectedCategories={selectedCategories}
           selectedSections={selectedSections}
           selectedSizes={selectedSizes}
