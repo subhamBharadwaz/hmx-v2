@@ -20,7 +20,7 @@ import { WishList } from "./wishlist"
 interface MainNavProps {
   items: MainNavItem[] | SidebarNavItem[]
   children?: React.ReactNode
-  accessToken: string | undefined
+  accessToken?: string | undefined
   isCommerce?: boolean
 }
 

@@ -28,10 +28,10 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
             <div className="hidden items-center gap-x-5 md:flex">
               <UserAccountNav
                 user={{
-                  firstName: user?.user?.firstName,
-                  lastName: user?.user?.lastName,
-                  email: user?.user?.email,
-                  photo: user?.user?.photo?.secure_url,
+                  firstName: user?.user?.firstName as string,
+                  lastName: user?.user?.lastName as string,
+                  email: user?.user?.email as string,
+                  photo: user?.user?.photo?.secure_url as string,
                 }}
               />
               <ModeToggle />
@@ -41,10 +41,10 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
         <MobileNav items={adminConfig.mainNav}>
           <UserAccountNav
             user={{
-              firstName: user?.user?.firstName,
-              lastName: user?.user?.lastName,
-              email: user?.user?.email,
-              photo: user?.user?.photo?.secure_url,
+              firstName: user?.user?.firstName as string,
+              lastName: user?.user?.lastName as string,
+              email: user?.user?.email as string,
+              photo: user?.user?.photo?.secure_url as string,
             }}
           />
           <ModeToggle />
