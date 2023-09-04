@@ -7,9 +7,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import { Button, buttonVariants } from "@/components/ui/button"
+import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
-import { ScrollArea } from "@/components/ui/scroll-area"
 import {
   Sheet,
   SheetContent,
@@ -18,55 +17,29 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import {
-  ProductCategories,
-  ProductSections,
-  ProductSizes,
-  categories,
-} from "@/constants"
-import { cn } from "@/lib/utils"
-import { IProducts } from "@/types"
-import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query"
-import axios from "axios"
+import { ProductCategories, ProductSections, ProductSizes } from "@/constants"
 
 import { Icons } from "../icons"
 
-export function FilterProducts() {
-  const queryClient = useQueryClient()
+interface FilterProductsProps {
+  onCategoryChange: (checked: boolean, value: string) => void
+  onSectionChange: (checked: boolean, value: string) => void
+  onSizeChange: (checked: boolean, value: string) => void
+  handleClearFilters: () => void
+  selectedCategories: string[]
+  selectedSections: string[]
+  selectedSizes: string[]
+}
 
-  const [selectedSections, setSelectedSections] = React.useState<string[]>([])
-  const [selectedCategories, setSelectedCategories] = React.useState<string[]>(
-    []
-  )
-
-  const fetchFilteredProducts = async (
-
-    category: string | string[]
-  ) => {
-    const res = await axios.get(
-      `${
-        process.env.NEXT_PUBLIC_API_URL
-      }/api/v1/products?category=${category || "All"}`
-    )
-    return await res?.data
-  }
-
-  const handleApplyFilters = () => {
-    const newData = fetchFilteredProducts(selectedCategories)
-      queryClient.setQueryData(["products"],newData)
-    
- 
-  }
-
-  const handleCategory = (isChecked: string |boolean, value:string) => {
-
-    setSelectedCategories(
-      isChecked
-        ? [...selectedCategories, value]
-        : selectedCategories.filter((item) => item !== value)
-    )
-  }
-
+export const FilterProducts: React.FC<FilterProductsProps> = ({
+  onCategoryChange,
+  onSectionChange,
+  onSizeChange,
+  selectedCategories,
+  selectedSections,
+  selectedSizes,
+  handleClearFilters,
+}) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -101,7 +74,10 @@ export function FilterProducts() {
                     <Checkbox
                       id={category}
                       value={category}
-                      onCheckedChange={(checked)=> handleCategory(checked, category)}
+                      checked={selectedCategories.includes(category)}
+                      onCheckedChange={(checked) =>
+                        onCategoryChange(checked as boolean, category)
+                      }
                     />
                   </div>
                 ))}
@@ -123,7 +99,14 @@ export function FilterProducts() {
                     >
                       {section}
                     </label>
-                    <Checkbox id={section} />
+                    <Checkbox
+                      id={section}
+                      value={section}
+                      checked={selectedSections.includes(section)}
+                      onCheckedChange={(checked) =>
+                        onSectionChange(checked as boolean, section)
+                      }
+                    />
                   </div>
                 ))}
               </div>
@@ -134,14 +117,24 @@ export function FilterProducts() {
             <AccordionContent>
               <div className="space-y-3">
                 {ProductSizes.map((size) => (
-                  <div key={size} className="flex items-center justify-between">
+                  <div
+                    key={size.value}
+                    className="flex items-center justify-between"
+                  >
                     <label
-                      htmlFor={size}
+                      htmlFor={size.label}
                       className="cursor-pointer text-sm font-medium leading-none text-slate-600 peer-disabled:cursor-not-allowed peer-disabled:opacity-70 dark:text-slate-300"
                     >
-                      {size}
+                      {size.label}
                     </label>
-                    <Checkbox id={size} />
+                    <Checkbox
+                      id={size.value}
+                      value={size.value}
+                      checked={selectedSizes.includes(size.value)}
+                      onCheckedChange={(checked) =>
+                        onSizeChange(checked as boolean, size.value)
+                      }
+                    />
                   </div>
                 ))}
               </div>
@@ -153,11 +146,9 @@ export function FilterProducts() {
             <Button
               type="submit"
               className="w-full"
-              onClick={handleApplyFilters}
+              variant="outline"
+              onClick={handleClearFilters}
             >
-              Apply
-            </Button>
-            <Button type="submit" className="w-full" variant="outline">
               Remove all
             </Button>
           </div>

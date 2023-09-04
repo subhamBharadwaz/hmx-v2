@@ -1,5 +1,4 @@
 import Container from "@/components/container"
-import { FilterProducts } from "@/components/product/filter"
 import Products from "@/components/product/products"
 import SwiperCards from "@/components/product/swiper"
 import { ProductCarousalData } from "@/constants"
@@ -44,9 +43,6 @@ export default async function ProductsPage() {
         </div>
       </div>
       <Container>
-        <div className="mb-5">
-          <FilterProducts />
-        </div>
         <Hydrate state={dehydratedState}>
           <Products />
         </Hydrate>

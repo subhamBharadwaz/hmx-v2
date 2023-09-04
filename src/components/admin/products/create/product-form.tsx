@@ -1,6 +1,7 @@
 "use client"
 
 import { FC, useState, useTransition } from "react"
+import dynamic from "next/dynamic"
 import { FileDialog } from "@/components/file-dialog"
 import { MultiSelect } from "@/components/multi-select"
 import { Button } from "@/components/ui/button"
@@ -36,9 +37,15 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import axios from "axios"
 import { useForm } from "react-hook-form"
 
+import "react-quill/dist/quill.snow.css"
+
 interface ProductFormProps {
   accessToken: string | undefined
 }
+
+const ReactQuill = dynamic(() => import("react-quill"), {
+  ssr: false, // Set ssr to false to make sure this component is only rendered on the client-side
+})
 
 const ProductForm: FC<ProductFormProps> = ({ accessToken }) => {
   const form = useForm<CreateProductInput>({
@@ -283,11 +290,27 @@ const ProductForm: FC<ProductFormProps> = ({ accessToken }) => {
         <FormField
           control={form.control}
           name="detail"
-          render={({ field }) => (
+          render={({ field: { onChange, onBlur, value } }) => (
             <FormItem>
               <FormLabel>Product Detail</FormLabel>
               <FormControl>
-                <Input placeholder="Enter the street name" {...field} />
+                <ReactQuill
+                  value={value}
+                  onBlur={onBlur}
+                  onChange={(newValue) => {
+                    onChange(newValue)
+                  }}
+                  modules={{
+                    toolbar: [
+                      [{ header: "1" }, { header: "2" }, { font: [] }],
+                      [{ size: [] }],
+                      ["bold", "italic", "underline", "strike", "blockquote"],
+                      [{ list: "ordered" }, { list: "bullet" }],
+                      ["link", "image", "video"],
+                      ["clean"],
+                    ],
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -297,11 +320,27 @@ const ProductForm: FC<ProductFormProps> = ({ accessToken }) => {
         <FormField
           control={form.control}
           name="description"
-          render={({ field }) => (
+          render={({ field: { onBlur, onChange, value } }) => (
             <FormItem>
               <FormLabel>Product Description</FormLabel>
               <FormControl>
-                <Input placeholder="Enter Product Description" {...field} />
+                <ReactQuill
+                  value={value}
+                  onBlur={onBlur}
+                  onChange={(newValue) => {
+                    onChange(newValue)
+                  }}
+                  modules={{
+                    toolbar: [
+                      [{ header: "1" }, { header: "2" }, { font: [] }],
+                      [{ size: [] }],
+                      ["bold", "italic", "underline", "strike", "blockquote"],
+                      [{ list: "ordered" }, { list: "bullet" }],
+                      ["link", "image", "video"],
+                      ["clean"],
+                    ],
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

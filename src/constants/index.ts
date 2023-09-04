@@ -60,7 +60,8 @@ export const ProductSizes = [
   },
   { value: "M", label: "M" },
   { value: "L", label: "L" },
-  { value: "XL", label: "Xl" },
+  { value: "XL", label: "XL" },
+  { value: "XXL", label: "XXL" },
 ]
 
 export const roles = [
