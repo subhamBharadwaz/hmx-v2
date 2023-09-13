@@ -90,7 +90,7 @@ const AdminEditProduct: FC<ProductFormProps> = ({ accessToken, productId }) => {
   }, [product])
 
   const adminUpdateProductMutation = useMutation({
-    mutationFn: async (data) => {
+    mutationFn: async (data: FormData) => {
       const res = await axios.put(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/product/${productId}`,
         data,
@@ -301,8 +301,10 @@ const AdminEditProduct: FC<ProductFormProps> = ({ accessToken, productId }) => {
               <MultiSelect
                 createAble={true}
                 isMulti={true}
+                // @ts-ignore
                 value={field.value}
                 options={ProductSizes}
+                // @ts-ignore
                 onChange={field.onChange}
                 placeholder="Select Sizes"
                 {...field}
