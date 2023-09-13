@@ -37,8 +37,10 @@ type SelectComponentProps = {
   isMulti?: boolean
   isDisabled?: boolean
   isLoading?: boolean
-  createAble: boolean
+  createAble?: boolean
   placeholder?: string
+  selected?: any[] | null
+  setSelected?: any
 }
 
 export const MultiSelect = ({

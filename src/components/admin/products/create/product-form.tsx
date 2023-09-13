@@ -251,7 +251,6 @@ const ProductForm: FC<ProductFormProps> = ({ accessToken }) => {
                     label: s,
                     value: s,
                   }))}
-                  // ts-ignore
                   selected={selectedSizes}
                   setSelected={setSelectedSizes}
                   {...field}
