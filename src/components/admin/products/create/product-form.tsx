@@ -60,7 +60,7 @@ const ProductForm: FC<ProductFormProps> = ({ accessToken }) => {
   const queryClient = useQueryClient()
 
   const adminCreateProductMutation = useMutation({
-    mutationFn: async (data) => {
+    mutationFn: async (data: FormData) => {
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/product/add`,
         data,
@@ -251,6 +251,7 @@ const ProductForm: FC<ProductFormProps> = ({ accessToken }) => {
                     label: s,
                     value: s,
                   }))}
+                  // ts-ignore
                   selected={selectedSizes}
                   setSelected={setSelectedSizes}
                   {...field}
