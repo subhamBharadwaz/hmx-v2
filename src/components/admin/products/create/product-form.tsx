@@ -117,7 +117,7 @@ const ProductForm: FC<ProductFormProps> = ({ accessToken }) => {
   return (
     <Form {...form}>
       <form
-        className="max-w-2xl space-y-5"
+        className="max-w-2xl space-y-5 px-1 md:pl-3"
         onSubmit={form.handleSubmit(onSubmit)}
       >
         <FormField
