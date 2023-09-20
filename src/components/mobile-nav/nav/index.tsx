@@ -12,9 +12,10 @@ import Body from "./body"
 
 interface NavProps {
   items: MainNavItem[] | SidebarNavItem[]
+  isAdmin?: boolean
 }
 
-const Nav: FC<NavProps> = ({ items }) => {
+const Nav: FC<NavProps> = ({ items, isAdmin }) => {
   const [selectedItem, setSelectedItem] = useState({
     isActive: false,
     index: 0,
@@ -30,12 +31,14 @@ const Nav: FC<NavProps> = ({ items }) => {
     >
       <div className="mb-20 flex gap-12">
         <div className="flex flex-col justify-between">
-          <Link
-            href="/admin"
-            className={cn(buttonVariants(), "mt-10 max-w-xs")}
-          >
-            Admin Dashboard
-          </Link>
+          {isAdmin && (
+            <Link
+              href="/admin"
+              className={cn(buttonVariants(), "mt-10 max-w-xs")}
+            >
+              Admin Dashboard
+            </Link>
+          )}
           <Body
             items={items}
             selectedItem={selectedItem}

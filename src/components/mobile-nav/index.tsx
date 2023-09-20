@@ -17,9 +17,15 @@ interface MobileNavProps {
   items: MainNavItem[] | SidebarNavItem[]
   children?: React.ReactNode
   className?: string
+  isAdmin?: boolean
 }
 
-export function MobileNav({ items, children, className }: MobileNavProps) {
+export function MobileNav({
+  items,
+  children,
+  className,
+  isAdmin,
+}: MobileNavProps) {
   const [isActive, setIsActive] = React.useState<boolean>(false)
 
   return (
@@ -80,7 +86,7 @@ export function MobileNav({ items, children, className }: MobileNavProps) {
       />
 
       <AnimatePresence mode="wait">
-        {isActive && <Nav items={items} />}
+        {isActive && <Nav isAdmin={isAdmin} items={items} />}
       </AnimatePresence>
     </nav>
   )

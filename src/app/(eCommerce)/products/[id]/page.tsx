@@ -24,7 +24,7 @@ export default async function ProductPage({
   )
   const dehydratedState = dehydrate(queryClient)
   return (
-    <section className="pt-24">
+    <section className="mb-20 pt-24">
       <Hydrate state={dehydratedState}>
         <div>
           <SingleProduct id={params.id} accessToken={user?.accessToken} />

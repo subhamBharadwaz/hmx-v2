@@ -22,6 +22,7 @@ interface MainNavProps {
   children?: React.ReactNode
   accessToken?: string | undefined
   isCommerce?: boolean
+  isAdmin?: boolean
 }
 
 export function MainNav({
@@ -29,6 +30,7 @@ export function MainNav({
   children,
   accessToken,
   isCommerce,
+  isAdmin,
 }: MainNavProps) {
   const [navTransparent, setNavTransparent] = React.useState<boolean>(true)
   const { data: session } = useSession()
@@ -118,15 +120,17 @@ export function MainNav({
                   navTransparent={navTransparent}
                   accessToken={accessToken}
                 />
-                <Link
-                  href="/admin"
-                  className={cn(
-                    buttonVariants({ size: "sm", variant: "destructive" }),
-                    "max-w-xs"
-                  )}
-                >
-                  Admin Dashboard
-                </Link>
+                {isAdmin && (
+                  <Link
+                    href="/admin"
+                    className={cn(
+                      buttonVariants({ size: "sm", variant: "destructive" }),
+                      "max-w-xs"
+                    )}
+                  >
+                    Admin Dashboard
+                  </Link>
+                )}
                 {!session?.user.user ? (
                   <Link
                     href="/login"
