@@ -39,8 +39,6 @@ type SelectComponentProps = {
   isLoading?: boolean
   createAble?: boolean
   placeholder?: string
-  selected?: any[] | null
-  setSelected?: any
 }
 
 export const MultiSelect = ({

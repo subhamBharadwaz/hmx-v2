@@ -1,19 +1,34 @@
 import { FC } from "react"
 import Link from "next/link"
+import { cn } from "@/lib/utils"
 import { Github, Linkedin, Mail, Twitter } from "lucide-react"
 
 import Container from "./container"
+import { Icons } from "./icons"
+import { Button, buttonVariants } from "./ui/button"
 
 interface FooterProps {}
 
 const Footer: FC<FooterProps> = ({}) => {
   return (
     <footer className="bg-[#212529] pb-10 text-white">
-      <div className="flex min-h-[30vh] items-center justify-center bg-[#F84714] py-11 md:min-h-[50vh]">
-        <p className="text-center text-lg font-semibold  text-foreground md:text-2xl xl:text-3xl">
-          Inspired by those in pursuit of a vision. <br /> The journey is up to
-          you.
+      <div className="flex min-h-[30vh] flex-col items-center justify-center gap-y-5 bg-[#F84714] py-11 md:min-h-[50vh]">
+        <h3 className="text-lg font-bold  text-foreground md:text-3xl xl:text-5xl">
+          Proudly Open Source
+        </h3>
+        <p className="max-w-md px-10 text-center text-slate-800 md:px-0">
+          Our source code is available on GitHub - feel free to read, review, or
+          contribute to it however you want!
         </p>
+
+        <a
+          target="_blank"
+          href="https://github.com/subhamBharadwaz/hmx-v2"
+          className={cn(buttonVariants(), " flex items-center gap-x-2")}
+        >
+          <Icons.gitHub className="h-6 w-6 text-white" />
+          GitHub
+        </a>
       </div>
       <Container className="mt-10 space-y-10">
         <div className="flex w-full flex-col gap-y-8 md:flex-row md:items-center md:justify-between">

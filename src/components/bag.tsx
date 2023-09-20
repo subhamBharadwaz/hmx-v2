@@ -1,6 +1,7 @@
 "use client"
 
 import { FC } from "react"
+import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { Icons } from "@/components/icons"
 import { Button, buttonVariants } from "@/components/ui/button"
@@ -12,21 +13,25 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
+import { cn } from "@/lib/utils"
 import { IBag } from "@/types"
 import { useQuery } from "@tanstack/react-query"
 import axios from "axios"
 import { useSession } from "next-auth/react"
 
 import BagCard from "./bag-card"
-import Link from "next/link"
-import { cn } from "@/lib/utils"
 
 interface BagProps {
   accessToken: string | undefined
-  navTransparent? : boolean
+  navTransparent?: boolean
+  className?: string
 }
 
-export const Bag: FC<BagProps> = ({ accessToken, navTransparent }) => {
+export const Bag: FC<BagProps> = ({
+  accessToken,
+  navTransparent,
+  className,
+}) => {
   const { data: session } = useSession()
   const router = useRouter()
 
@@ -58,9 +63,15 @@ export const Bag: FC<BagProps> = ({ accessToken, navTransparent }) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button onClick={bagTriggerHandler} variant='link' size='sm'>
-          <Icons.bag className={cn(pathname === '/' && navTransparent ? 'text-white' : 'text-foreground')} />
-        </Button>
+        <Icons.bag
+          onClick={bagTriggerHandler}
+          className={cn(
+            pathname === "/" && navTransparent
+              ? "text-white"
+              : "text-foreground",
+            className
+          )}
+        />
       </SheetTrigger>
       {session?.user && (
         <SheetContent
@@ -73,7 +84,6 @@ export const Bag: FC<BagProps> = ({ accessToken, navTransparent }) => {
           </SheetHeader>
 
           {bag ? (
-            
             bag?.products?.map((product) => (
               <BagCard
                 key={product?.productId}
@@ -83,27 +93,39 @@ export const Bag: FC<BagProps> = ({ accessToken, navTransparent }) => {
             ))
           ) : (
             <div className="flex h-[20rem] w-full flex-col items-center justify-center gap-y-10 ">
-            <p className="text-xl text-slate-500 md:text-2xl">Your bag is empty!</p>
-            <p className="text-xl text-slate-400 md:text-2xl">Explore more and shortlist some items</p>
-            <Link href='/products' className={cn(buttonVariants({size: 'lg'}), 'mx-auto')}>continue shopping</Link>
-          </div>
+              <p className="text-xl text-slate-500 md:text-2xl">
+                Your bag is empty!
+              </p>
+              <p className="text-xl text-slate-400 md:text-2xl">
+                Explore more and shortlist some items
+              </p>
+              <Link
+                href="/products"
+                className={cn(buttonVariants({ size: "lg" }), "mx-auto")}
+              >
+                continue shopping
+              </Link>
+            </div>
           )}
 
           <SheetFooter className="my-10 align-bottom">
             <div className="w-full space-y-5">
-             {bag && (
-              <>
-               <div className="flex w-full justify-between border-b border-foreground pb-1">
-               <p className="font-semibold text-foreground">Subtotal</p>
-               <p className="font-semibold text-foreground">
-                 Rs. {bag?.totalPrice}
-               </p>
-             </div>
-             <Link href='/checkout' className={cn(buttonVariants({size:'lg'}), 'w-full')}>
-               Checkout
-             </Link>
-             </>
-             )}
+              {bag && (
+                <>
+                  <div className="flex w-full justify-between border-b border-foreground pb-1">
+                    <p className="font-semibold text-foreground">Subtotal</p>
+                    <p className="font-semibold text-foreground">
+                      Rs. {bag?.totalPrice}
+                    </p>
+                  </div>
+                  <Link
+                    href="/checkout"
+                    className={cn(buttonVariants({ size: "lg" }), "w-full")}
+                  >
+                    Checkout
+                  </Link>
+                </>
+              )}
               <div className="w-full space-y-10 rounded-md bg-orange-50 p-5">
                 <div className="flex items-center justify-between gap-x-5">
                   <p className="font-serif text-lg text-slate-900">VOGUE</p>

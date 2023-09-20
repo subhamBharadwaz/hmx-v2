@@ -1,6 +1,7 @@
 "use client"
 
 import { FC } from "react"
+import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { Icons } from "@/components/icons"
 import {
@@ -11,22 +12,26 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
+import { cn } from "@/lib/utils"
 import { IWishlist } from "@/types"
 import { useQuery } from "@tanstack/react-query"
 import axios from "axios"
 import { useSession } from "next-auth/react"
 
-import WishListCard from "./wishlist-card"
-import Link from "next/link"
-import { cn } from "@/lib/utils"
 import { Button, buttonVariants } from "./ui/button"
+import WishListCard from "./wishlist-card"
 
 interface WishListProps {
   accessToken: string | undefined
-  navTransparent? : boolean
+  navTransparent?: boolean
+  className?: string
 }
 
-export const WishList: FC<WishListProps> = ({ accessToken,navTransparent }) => {
+export const WishList: FC<WishListProps> = ({
+  accessToken,
+  navTransparent,
+  className,
+}) => {
   const { data: session } = useSession()
   const router = useRouter()
 
@@ -58,9 +63,15 @@ export const WishList: FC<WishListProps> = ({ accessToken,navTransparent }) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button onClick={wishlistTriggerHandler} variant='link' size='sm'>
-          <Icons.favorite className={cn(pathname === '/' && navTransparent ? 'text-white' : 'text-foreground')} />
-        </Button>
+        <Icons.favorite
+          onClick={wishlistTriggerHandler}
+          className={cn(
+            pathname === "/" && navTransparent
+              ? "text-white"
+              : "text-foreground",
+            className
+          )}
+        />
       </SheetTrigger>
       {session?.user && (
         <SheetContent
@@ -71,7 +82,7 @@ export const WishList: FC<WishListProps> = ({ accessToken,navTransparent }) => {
           <SheetHeader className="mb-10">
             <SheetTitle>WishList</SheetTitle>
           </SheetHeader>
-          {wishlist &&  wishlist?.length !== 0 ? (
+          {wishlist && wishlist?.length !== 0 ? (
             wishlist?.map((product) => (
               <WishListCard
                 key={product?.productId}
@@ -79,14 +90,22 @@ export const WishList: FC<WishListProps> = ({ accessToken,navTransparent }) => {
                 accessToken={accessToken}
               />
             ))
-           ) : (
+          ) : (
             <div className="flex h-[20rem] w-full flex-col items-center justify-center gap-y-10 ">
-              <p className="text-xl text-slate-500 md:text-2xl">Your wishlist is empty!</p>
-              <p className="text-xl text-slate-400 md:text-2xl">Explore more and shortlist some items</p>
-              <Link href='/products' className={cn(buttonVariants({size: 'lg'}), 'mx-auto')}>continue shopping</Link>
+              <p className="text-xl text-slate-500 md:text-2xl">
+                Your wishlist is empty!
+              </p>
+              <p className="text-xl text-slate-400 md:text-2xl">
+                Explore more and shortlist some items
+              </p>
+              <Link
+                href="/products"
+                className={cn(buttonVariants({ size: "lg" }), "mx-auto")}
+              >
+                continue shopping
+              </Link>
             </div>
-           )
-          }
+          )}
 
           <SheetFooter className="my-10 align-bottom">
             <div className="w-full space-y-5">

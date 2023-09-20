@@ -8,6 +8,7 @@ import { MainNavItem, SidebarNavItem } from "@/types"
 import { AnimatePresence, motion } from "framer-motion"
 
 import { Bag } from "../bag"
+import { Button } from "../ui/button"
 import { WishList } from "../wishlist"
 import { background, opacity } from "./anim"
 import Nav from "./nav"
@@ -16,9 +17,15 @@ interface MobileNavProps {
   items: MainNavItem[] | SidebarNavItem[]
   children?: React.ReactNode
   className?: string
+  isAdmin?: boolean
 }
 
-export function MobileNav({ items, children, className }: MobileNavProps) {
+export function MobileNav({
+  items,
+  children,
+  className,
+  isAdmin,
+}: MobileNavProps) {
   const [isActive, setIsActive] = React.useState<boolean>(false)
 
   return (
@@ -66,7 +73,7 @@ export function MobileNav({ items, children, className }: MobileNavProps) {
           animate={!isActive ? "open" : "closed"}
           className="absolute right-0 flex gap-8"
         >
-          <div className="flex cursor-pointer items-center justify-center">
+          <div className="flex cursor-pointer items-center gap-x-3">
             {children}
           </div>
         </motion.div>
@@ -79,7 +86,7 @@ export function MobileNav({ items, children, className }: MobileNavProps) {
       />
 
       <AnimatePresence mode="wait">
-        {isActive && <Nav items={items} />}
+        {isActive && <Nav isAdmin={isAdmin} items={items} />}
       </AnimatePresence>
     </nav>
   )

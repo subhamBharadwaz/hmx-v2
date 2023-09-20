@@ -117,7 +117,7 @@ const ProductForm: FC<ProductFormProps> = ({ accessToken }) => {
   return (
     <Form {...form}>
       <form
-        className="max-w-2xl space-y-5"
+        className="max-w-2xl space-y-5 px-1 md:pl-3"
         onSubmit={form.handleSubmit(onSubmit)}
       >
         <FormField
@@ -247,12 +247,12 @@ const ProductForm: FC<ProductFormProps> = ({ accessToken }) => {
               <FormControl>
                 <MultiSelect
                   placeholder="Select sizes"
-                  options={ProductSizes.map((s) => ({
-                    label: s,
-                    value: s,
-                  }))}
-                  selected={selectedSizes}
-                  setSelected={setSelectedSizes}
+                  isMulti={true}
+                  options={ProductSizes}
+                  // @ts-ignore
+                  value={selectedSizes}
+                  // @ts-ignore
+                  onChange={setSelectedSizes}
                   {...field}
                 />
               </FormControl>

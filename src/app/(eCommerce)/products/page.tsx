@@ -42,7 +42,7 @@ export default async function ProductsPage() {
           </p>
         </div>
       </div>
-      <Container>
+      <Container className="mb-20">
         <Hydrate state={dehydratedState}>
           <Products />
         </Hydrate>

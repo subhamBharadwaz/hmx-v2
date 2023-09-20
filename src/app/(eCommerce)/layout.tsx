@@ -27,22 +27,31 @@ export default async function ECommerceLayout({
           <MainNav
             items={eCommerceConfig.mainNav}
             accessToken={user?.accessToken}
+            isAdmin={user?.user?.role === "admin" ? true : false}
             isCommerce={true}
           />
         </header>
-        <MobileNav items={eCommerceConfig.mainNav}>
-          <Link
-            href={user?.accessToken ? "/account" : "/login"}
-            className={cn(buttonVariants({ variant: "link", size: "sm" }))}
-          >
-            <Icons.user />
+        <MobileNav
+          items={eCommerceConfig.mainNav}
+          isAdmin={user?.user?.role === "admin" ? true : false}
+        >
+          <Link href={user?.accessToken ? "/account" : "/login"}>
+            <Icons.user className="h-5 w-5" />
           </Link>
-          <Bag navTransparent={false} accessToken={user?.accessToken} />
-          <WishList navTransparent={false} accessToken={user?.accessToken} />
+          <Bag
+            navTransparent={false}
+            accessToken={user?.accessToken}
+            className="h-5 w-5"
+          />
+          <WishList
+            navTransparent={false}
+            accessToken={user?.accessToken}
+            className="h-5 w-5"
+          />
         </MobileNav>
       </>
 
-      <main className="relative mb-10 flex-1 ">{children}</main>
+      <main className="relative flex-1 ">{children}</main>
       <Footer />
     </div>
   )
