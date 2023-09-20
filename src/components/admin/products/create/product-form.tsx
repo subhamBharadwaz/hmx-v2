@@ -247,12 +247,12 @@ const ProductForm: FC<ProductFormProps> = ({ accessToken }) => {
               <FormControl>
                 <MultiSelect
                   placeholder="Select sizes"
-                  options={ProductSizes.map((s) => ({
-                    label: s,
-                    value: s,
-                  }))}
-                  selected={selectedSizes}
-                  setSelected={setSelectedSizes}
+                  isMulti={true}
+                  options={ProductSizes}
+                  // @ts-ignore
+                  value={selectedSizes}
+                  // @ts-ignore
+                  onChange={setSelectedSizes}
                   {...field}
                 />
               </FormControl>
