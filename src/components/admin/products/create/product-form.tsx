@@ -38,6 +38,7 @@ import axios from "axios"
 import { useForm } from "react-hook-form"
 
 import "react-quill/dist/quill.snow.css"
+import { Icons } from "@/components/icons"
 
 interface ProductFormProps {
   accessToken: string | undefined
@@ -246,13 +247,14 @@ const ProductForm: FC<ProductFormProps> = ({ accessToken }) => {
               <FormLabel>Size</FormLabel>
               <FormControl>
                 <MultiSelect
-                  placeholder="Select sizes"
+                  createAble={true}
                   isMulti={true}
+                  // @ts-ignore
+                  value={field.value}
                   options={ProductSizes}
                   // @ts-ignore
-                  value={selectedSizes}
-                  // @ts-ignore
-                  onChange={setSelectedSizes}
+                  onChange={field.onChange}
+                  placeholder="Select Sizes"
                   {...field}
                 />
               </FormControl>
@@ -364,6 +366,9 @@ const ProductForm: FC<ProductFormProps> = ({ accessToken }) => {
         </FormItem>
 
         <Button type="submit" size="lg">
+          {adminCreateProductMutation.isLoading && (
+            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+          )}
           Create Product
         </Button>
       </form>
