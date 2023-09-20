@@ -100,13 +100,8 @@ export function MainNav({
                   {siteConfig.name}
                 </span>
               </Link>
-              <div className="hidden gap-3 md:flex">
-                <Link
-                  href={accessToken ? "/account" : "/login"}
-                  className={cn(
-                    buttonVariants({ variant: "link", size: "sm" })
-                  )}
-                >
+              <div className="hidden items-center gap-x-5 md:flex">
+                <Link href={accessToken ? "/account" : "/login"}>
                   <Icons.user
                     className={cn(
                       pathname === "/" && navTransparent
@@ -123,6 +118,15 @@ export function MainNav({
                   navTransparent={navTransparent}
                   accessToken={accessToken}
                 />
+                <Link
+                  href="/admin"
+                  className={cn(
+                    buttonVariants({ size: "sm", variant: "destructive" }),
+                    "max-w-xs"
+                  )}
+                >
+                  Admin Dashboard
+                </Link>
                 {!session?.user.user ? (
                   <Link
                     href="/login"

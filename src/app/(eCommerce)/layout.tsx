@@ -31,14 +31,19 @@ export default async function ECommerceLayout({
           />
         </header>
         <MobileNav items={eCommerceConfig.mainNav}>
-          <Link
-            href={user?.accessToken ? "/account" : "/login"}
-            className={cn(buttonVariants({ variant: "link", size: "sm" }))}
-          >
-            <Icons.user />
+          <Link href={user?.accessToken ? "/account" : "/login"}>
+            <Icons.user className="h-5 w-5" />
           </Link>
-          <Bag navTransparent={false} accessToken={user?.accessToken} />
-          <WishList navTransparent={false} accessToken={user?.accessToken} />
+          <Bag
+            navTransparent={false}
+            accessToken={user?.accessToken}
+            className="h-5 w-5"
+          />
+          <WishList
+            navTransparent={false}
+            accessToken={user?.accessToken}
+            className="h-5 w-5"
+          />
         </MobileNav>
       </>
 

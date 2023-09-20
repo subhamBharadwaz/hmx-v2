@@ -1,6 +1,9 @@
 "use client"
 
 import { FC, useState } from "react"
+import Link from "next/link"
+import { Button, buttonVariants } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 import { MainNavItem, SidebarNavItem } from "@/types"
 import { motion } from "framer-motion"
 
@@ -27,6 +30,12 @@ const Nav: FC<NavProps> = ({ items }) => {
     >
       <div className="mb-20 flex gap-12">
         <div className="flex flex-col justify-between">
+          <Link
+            href="/admin"
+            className={cn(buttonVariants(), "mt-10 max-w-xs")}
+          >
+            Admin Dashboard
+          </Link>
           <Body
             items={items}
             selectedItem={selectedItem}

@@ -8,6 +8,7 @@ import { MainNavItem, SidebarNavItem } from "@/types"
 import { AnimatePresence, motion } from "framer-motion"
 
 import { Bag } from "../bag"
+import { Button } from "../ui/button"
 import { WishList } from "../wishlist"
 import { background, opacity } from "./anim"
 import Nav from "./nav"
@@ -66,7 +67,7 @@ export function MobileNav({ items, children, className }: MobileNavProps) {
           animate={!isActive ? "open" : "closed"}
           className="absolute right-0 flex gap-8"
         >
-          <div className="flex cursor-pointer items-center justify-center">
+          <div className="flex cursor-pointer items-center gap-x-3">
             {children}
           </div>
         </motion.div>
