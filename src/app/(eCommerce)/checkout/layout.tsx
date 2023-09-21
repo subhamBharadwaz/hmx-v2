@@ -1,6 +1,3 @@
-import Container from "@/components/container"
-import { MainNav } from "@/components/main-nav"
-import { eCommerceConfig } from "@/config/ecommerce"
 import { getCurrentUser } from "@/lib/session"
 
 interface MarketingLayoutProps {
@@ -14,10 +11,8 @@ export default async function CheckoutLayout({
 
   return (
     <div>
-      <header className="sticky top-0 z-40 bg-background">
-        
-      </header>
-      <main className="w-full">{children}</main>
+      <header className="sticky top-0 z-40 bg-background"></header>
+      <main className="mb-20 w-full">{children}</main>
     </div>
   )
 }
