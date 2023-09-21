@@ -22,7 +22,7 @@ export default function LoginPage() {
 
         <p className="my-5">
           If you don&apos;t have an account <br className="hidden sm:inline" />{" "}
-          You can <Link href="/">Register here!</Link>{" "}
+          You can <Link href="/register">Register here!</Link>{" "}
         </p>
 
         <Image

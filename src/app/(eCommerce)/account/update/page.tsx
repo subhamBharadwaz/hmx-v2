@@ -29,7 +29,7 @@ export default async function UpdateUserDetailsPage() {
   const dehydratedState = dehydrate(queryClient)
 
   return (
-    <section className="container space-y-10 pt-24">
+    <section className="container mb-20 space-y-10 pt-24">
       <Link
         href="/account"
         className="flex items-center gap-x-2 text-lg font-semibold"

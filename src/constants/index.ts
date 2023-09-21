@@ -169,3 +169,33 @@ export const productSections = [
     label: "Unisex",
   },
 ]
+
+export const visionaries = [
+  {
+    id: 1,
+    name: "Michael Rodriguez",
+    image:
+      "https://images.pexels.com/photos/8345977/pexels-photo-8345977.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    para: `Michael Rodriguez, our visionary Head of Marketing, plays a
+    pivotal role in shaping HMX&apos;s brand identity and
+    driving customer engagement.`,
+  },
+  {
+    id: 2,
+    name: "Elias Jara",
+    image:
+      "https://images.pexels.com/photos/15761320/pexels-photo-15761320/free-photo-of-girl-posing-in-a-fashionable-outfit.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    para: `Elias Jara, our dedicated Director of Customer Experience,
+    is passionate about delivering exceptional service to our
+    valued customers.`,
+  },
+  {
+    id: 3,
+    name: "Matheus Bertelli",
+    image:
+      "https://images.pexels.com/photos/15141516/pexels-photo-15141516/free-photo-of-man-speaking-on-a-meeting.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+    para: `Matheus Bertelli, our brilliant CTO, leads the technical
+    team at HMX, overseeing the development and implementation
+    of innovative solutions that power our e-commerce platform.`,
+  },
+]

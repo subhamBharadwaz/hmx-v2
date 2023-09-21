@@ -23,11 +23,19 @@ const ProductInfoAccordion: FC<ProductInfoAccordionProps> = ({
     <Accordion type="single" collapsible className={cn("w-full", className)}>
       <AccordionItem value="item-1">
         <AccordionTrigger>Product Details</AccordionTrigger>
-        <AccordionContent>{parse(details)}</AccordionContent>
+        <AccordionContent>
+          {details
+            ? parse(details)
+            : `There's no detail about this product at the moment.`}
+        </AccordionContent>
       </AccordionItem>
       <AccordionItem value="item-2">
         <AccordionTrigger>Product Description</AccordionTrigger>
-        <AccordionContent>{parse(description)}</AccordionContent>
+        <AccordionContent>
+          {description
+            ? parse(description)
+            : `There's no description about this product at the moment.`}
+        </AccordionContent>
       </AccordionItem>
     </Accordion>
   )
