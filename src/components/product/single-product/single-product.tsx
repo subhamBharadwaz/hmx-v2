@@ -2,12 +2,19 @@
 
 import { FC, useEffect, useState } from "react"
 import Image from "next/image"
-import Link from "next/link"
 import { useRouter } from "next/navigation"
 import Alert from "@/components/alert"
 import Container from "@/components/container"
 import { Icons } from "@/components/icons"
 import { Button, buttonVariants } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import { toast } from "@/components/ui/use-toast"
 import { cn } from "@/lib/utils"
 import { CreateBagInput } from "@/lib/validations/bag"
@@ -18,6 +25,7 @@ import axios from "axios"
 
 import ProductInfoAccordion from "./product-info-accordion"
 import Reviews from "./reviews"
+import SizeGuide from "./size-guide"
 import SingleProductImageSwiper from "./swiper"
 
 interface SingleProductProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -208,9 +216,19 @@ const SingleProduct: FC<SingleProductProps> = ({ id, accessToken }) => {
               <p className="font-semibold text-slate-700 dark:text-slate-300 lg:text-lg">
                 Select Size
               </p>
-              <button className={cn(buttonVariants({ variant: "link" }))}>
-                Size Chart
-              </button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="link">Size Guide</Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[400px]">
+                  <DialogHeader>
+                    <DialogTitle>Size Guide</DialogTitle>
+                  </DialogHeader>
+                  <ScrollArea className="h-96 w-full">
+                    <SizeGuide />
+                  </ScrollArea>
+                </DialogContent>
+              </Dialog>
             </div>
             <div className="space-y-3">
               <p className="text-sm text-slate-500 dark:text-slate-400">
