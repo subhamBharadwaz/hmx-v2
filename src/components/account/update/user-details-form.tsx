@@ -1,6 +1,6 @@
 "use client"
 
-import { FC, useState } from "react"
+import { FC } from "react"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -14,8 +14,6 @@ import { Input } from "@/components/ui/input"
 import { useToast } from "@/components/ui/use-toast"
 import { cn } from "@/lib/utils"
 import { CreateUserUpdateInput, updateUserSchema } from "@/lib/validations/user"
-import { useStore } from "@/store"
-import { IUser } from "@/types"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import axios from "axios"

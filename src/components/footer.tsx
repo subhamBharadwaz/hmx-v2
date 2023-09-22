@@ -5,6 +5,7 @@ import { Github, Linkedin, Mail, Twitter } from "lucide-react"
 
 import Container from "./container"
 import { Icons } from "./icons"
+import NewsLetterForm from "./news-letter-form"
 import { Button, buttonVariants } from "./ui/button"
 
 interface FooterProps {}
@@ -13,7 +14,7 @@ const Footer: FC<FooterProps> = ({}) => {
   return (
     <footer className="bg-[#212529] pb-10 text-white">
       <div className="flex min-h-[30vh] flex-col items-center justify-center gap-y-5 bg-[#F84714] py-11 md:min-h-[50vh]">
-        <h3 className="text-lg font-bold  text-foreground md:text-3xl xl:text-5xl">
+        <h3 className="text-center text-lg font-bold text-foreground md:text-3xl xl:text-5xl">
           Proudly Open Source
         </h3>
         <p className="max-w-md px-10 text-center text-slate-800 md:px-0">
@@ -38,6 +39,7 @@ const Footer: FC<FooterProps> = ({}) => {
               Release dates, philosophy, stories, & book recommendations. <br />{" "}
               A few a month.
             </p>
+            <NewsLetterForm />
           </div>
           <div className="flex w-full  items-center justify-between md:w-1/4">
             <div className="flex flex-col gap-y-1">

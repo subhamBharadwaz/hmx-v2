@@ -1,7 +1,6 @@
 "use client"
 
 import { FC, useEffect, useState } from "react"
-import Link from "next/link"
 import {
   motion,
   stagger,
@@ -44,17 +43,14 @@ const HeroSection: FC = () => {
         loop
         muted={isMuted}
         playsInline
+        poster="/images/hero-poster.webp"
         className="h-full w-full object-cover"
       >
         <source
-          src="https://res.cloudinary.com/dogdzaavf/video/upload/v1685030114/HMX_Hero_Section_-_Made_with_Clipchamp_z6cpgk.mp4"
+          src="https://subham-hmx.s3.amazonaws.com/videos/HMX_Hero_Section_-_Made_with_Clipchamp_z6cpgk.mp4"
           type="video/mp4"
         />
-        <source
-          id="jpg"
-          src="../../public/images/banner.webp"
-          type="photo/jpg"
-        />
+        Your browser does not support the video tag.
       </video>
 
       {/* <button onClick={() => setAudioOn(!audioOn)}>On</button> */}
