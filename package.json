@@ -46,6 +46,7 @@
     "@t3-oss/env-nextjs": "^0.6.1",
     "@tailwindcss/line-clamp": "^0.4.4",
     "@tailwindcss/typography": "^0.5.9",
+    "@tanstack/query-core": "^4.35.3",
     "@tanstack/react-query": "^4.32.6",
     "@tanstack/react-table": "^8.9.1",
     "@types/node": "20.1.0",
