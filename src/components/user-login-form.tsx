@@ -2,8 +2,7 @@
 
 import { FC, useState } from "react"
 import { useSearchParams } from "next/navigation"
-import { Icons } from "@/components/icons"
-import { Button, buttonVariants } from "@/components/ui/button"
+import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
@@ -14,10 +13,13 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { toast } from "@/components/ui/use-toast"
+import { cn } from "@/lib/utils"
 import { CreateUserLoginInput, userLoginSchema } from "@/lib/validations/auth"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { signIn } from "next-auth/react"
 import { useForm } from "react-hook-form"
+
+import { Icons } from "./icons"
 
 interface UserLoginFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -84,8 +86,17 @@ export const UserLoginForm: FC<UserLoginFormProps> = () => {
             </FormItem>
           )}
         />
-        <Button className="w-full" size="lg" type="submit">
-          Login
+        <Button
+          className={cn("w-full", {
+            "cursor-not-allowed opacity-60": isLoading,
+          })}
+          size="lg"
+          type="submit"
+        >
+          Login{" "}
+          {isLoading ? (
+            <Icons.spinner className="ml-2 h-4 w-4 animate-spin" />
+          ) : null}
         </Button>
       </form>
     </Form>
