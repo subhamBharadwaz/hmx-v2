@@ -1,6 +1,7 @@
 import dynamic from "next/dynamic"
 import Link from "next/link"
 import LogoutButton from "@/components/account/logout"
+import UserDetails from "@/components/account/user-details"
 import { Button, buttonVariants } from "@/components/ui/button"
 import { getCurrentUser } from "@/lib/session"
 import { cn } from "@/lib/utils"
@@ -23,11 +24,7 @@ export default async function AccountPage() {
       <div className="space-y-5">
         <h3 className="text-lg text-foreground md:text-2xl">Account Details</h3>
         <div className="space-y-3">
-          <p className="text-foreground lg:text-lg">{`${user?.user?.firstName} ${user?.user?.lastName}`}</p>
-          <p className="text-foreground lg:text-lg">{user?.user?.email}</p>
-          <p className="text-foreground lg:text-lg">
-            {user?.user?.phoneNumber}
-          </p>
+          <UserDetails accessToken={user?.accessToken} />
           <Link
             href="/account/update"
             className={cn(buttonVariants({ size: "sm", variant: "outline" }))}

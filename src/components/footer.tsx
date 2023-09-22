@@ -13,7 +13,7 @@ const Footer: FC<FooterProps> = ({}) => {
   return (
     <footer className="bg-[#212529] pb-10 text-white">
       <div className="flex min-h-[30vh] flex-col items-center justify-center gap-y-5 bg-[#F84714] py-11 md:min-h-[50vh]">
-        <h3 className="text-lg font-bold  text-foreground md:text-3xl xl:text-5xl">
+        <h3 className="text-center text-lg font-bold text-foreground md:text-3xl xl:text-5xl">
           Proudly Open Source
         </h3>
         <p className="max-w-md px-10 text-center text-slate-800 md:px-0">
